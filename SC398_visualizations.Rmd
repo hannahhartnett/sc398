@@ -1,6 +1,6 @@
 ---
 title: "SC398_visualizations"
-author: "Hannah Hartnett"
+author: "Hannah Hartnett, Cole Guerin, Frank Driscoll, Cam Garfield"
 date: "4/20/2021"
 output: html_document
 ---
