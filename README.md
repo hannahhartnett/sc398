@@ -1,1 +1,1 @@
-# sc398A visualization project for CLAS
+# sc398 A visualization project for CLAS
