@@ -1,16 +1,18 @@
 ---
 title: Generate Reproducible & Live HTML and PDF Conference Posters Using RMarkdown
 author:
-  - name: Brent Thorne
+  - name: Frank Driscoll
     affil: 1
-    orcid: '0000-0002-1099-3857'
-  - name: Another G. Author
-    affil: 2
+  - name: Cam Garfield
+    affil: 1
+  - name: Cole Guerin
+    affil: 1
+  - name: Hannah Hartnett
+    affil: 1
+  
 affiliation:
   - num: 1
-    address: Department of Earth Science, Brock University
-  - num: 2
-    address: Department of Graphics and Layouts, University of Posters; Canada
+    address: Statistical Graphics, Colby College
 column_numbers: 3
 logoright_name: https&#58;//raw.githubusercontent.com/brentthorne/posterdown/master/images/betterhexlogo.png
 logoleft_name: https&#58;//raw.githubusercontent.com/brentthorne/posterdown/master/images/betterhexlogo.png
@@ -22,6 +24,20 @@ bibliography: packages.bib
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = FALSE)
+library(Lahman)
+
+data(People)
+people <- People
+head(People)
+
+batting <- Batting
+head(batting)
+
+pitching <- Pitching
+head(pitching)
+
+fielding <- Fielding
+head(fielding)
 ```
 
 # Introduction
