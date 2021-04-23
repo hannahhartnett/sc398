@@ -39,6 +39,17 @@ head(pitching)
 
 fielding <- Fielding
 head(fielding)
+
+sums <- batting %>% 
+  group_by(playerID) %>% 
+  summarise(ab_sum = sum(AB), k_sum = sum(SO), hr_sum = sum(HR))
+sums$hr_ab = sums$hr_sum/sums$ab_sum
+sums$k_ab = sums$k_sum/sums$ab_sum
+
+by_ID <- sums %>% 
+  filter(ab_sum > 1000)
+  filter(k_ab>0) %>% 
+  filter(hr_ab>0)
 ```
 
 # Introduction
