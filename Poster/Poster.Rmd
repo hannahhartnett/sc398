@@ -25,6 +25,7 @@ bibliography: packages.bib
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = FALSE)
 library(Lahman)
+library(dplyr)
 
 data(People)
 people <- People
