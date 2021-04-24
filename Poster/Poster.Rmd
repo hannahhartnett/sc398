@@ -50,6 +50,13 @@ by_ID <- sums %>%
   filter(ab_sum > 1000)
   filter(k_ab>0) %>% 
   filter(hr_ab>0)
+  
+by_year <- batting %>%
+  group_by(yearID) %>%
+  summarise(ab = sum(AB), k = sum(SO), hr = sum(HR))
+
+by_year$hr_ab = by_year$hr/by_year$ab
+by_year$k_ab = by_year$k/by_year$ab
 ```
 
 # Introduction
