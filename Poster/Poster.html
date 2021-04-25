@@ -21,12 +21,11 @@ Google fonts api stuff
 
 <title>Generate Reproducible &amp; Live HTML and PDF Conference Posters Using RMarkdown</title>
 
-<script src="Poster_files/accessible-code-block-0.0.1/empty-anchor.js"></script>
 
 
-<style type="text/css">code.sourceCode > span { display: inline-block; line-height: 1.25; }
-code.sourceCode > span { color: inherit; text-decoration: inherit; }
-code.sourceCode > span:empty { height: 1.2em; }
+<style type="text/css">a.sourceLine { display: inline-block; line-height: 1.25; }
+a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
+a.sourceLine:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
 code.sourceCode { white-space: pre; position: relative; }
 div.sourceCode { margin: 1em 0; }
@@ -36,16 +35,14 @@ div.sourceCode { overflow: auto; }
 }
 @media print {
 code.sourceCode { white-space: pre-wrap; }
-code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+a.sourceLine { text-indent: -1em; padding-left: 1em; }
 }
-pre.numberSource code
-  { counter-reset: source-line 0; }
-pre.numberSource code > span
-  { position: relative; left: -4em; counter-increment: source-line; }
-pre.numberSource code > span > a:first-child::before
-  { content: counter(source-line);
+pre.numberSource a.sourceLine
+  { position: relative; left: -4em; }
+pre.numberSource a.sourceLine::before
+  { content: attr(data-line-number);
     position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; display: inline-block;
+    border: none; pointer-events: all; display: inline-block;
     -webkit-touch-callout: none; -webkit-user-select: none;
     -khtml-user-select: none; -moz-user-select: none;
     -ms-user-select: none; user-select: none;
@@ -54,9 +51,9 @@ pre.numberSource code > span > a:first-child::before
   }
 pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
 div.sourceCode
-  {   }
+  {  }
 @media screen {
-code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+a.sourceLine::before { text-decoration: underline; }
 }
 code span.al { color: #ff0000; font-weight: bold; } /* Alert */
 code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
@@ -346,8 +343,8 @@ font-size: 20pt;
 <!-- Poster Title -->
 <div class= "poster_title">
 <h1 id="title">Generate Reproducible &amp; Live HTML and PDF Conference Posters Using RMarkdown</h1>
-<h3 id="author">Brent Thorne<sup>1, <a class="orcid" href="https://orcid.org/0000-0002-1099-3857"><img src="https://raw.githubusercontent.com/brentthorne/posterdown/master/images/orcid.jpg"></a></sup>, Another G. Author<sup>2</sup></h3><br>
-<h5 id="affiliation"><sup>1</sup> Department of Earth Science, Brock University<br> <sup>2</sup> Department of Graphics and Layouts, University of Posters; Canada</h5>
+<h3 id="author">Frank Driscoll<sup>1, <a class="orcid" href="https://orcid.org/0000-0002-1099-3857"><img src="https://raw.githubusercontent.com/brentthorne/posterdown/master/images/orcid.jpg"></a></sup>, Cam Garfield<sup>2</sup>, Cole Guerin<sup></sup>, Hannah Hartnett<sup></sup></h3><br>
+<h5 id="affiliation"><sup>1</sup> Statistical Graphics, Colby College<br> <sup>2</sup> Department of Graphics and Layouts, University of Posters; Canada</h5>
 </div>
 <!-- Right Logo  -->
 <div class="logo_right">
@@ -547,14 +544,14 @@ Petal.Width
 Figure 1: Great figure!
 </p>
 </div>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a>data &lt;-<span class="st"> </span>iris</span>
-<span id="cb1-2"><a href="#cb1-2"></a></span>
-<span id="cb1-3"><a href="#cb1-3"></a><span class="kw">plot</span>(<span class="dt">x =</span> data<span class="op">$</span>Sepal.Length, </span>
-<span id="cb1-4"><a href="#cb1-4"></a>     <span class="dt">y =</span> data<span class="op">$</span>Sepal.Width, </span>
-<span id="cb1-5"><a href="#cb1-5"></a>     <span class="dt">col =</span> data<span class="op">$</span>Species,</span>
-<span id="cb1-6"><a href="#cb1-6"></a>     <span class="dt">pch =</span> <span class="dv">19</span>, </span>
-<span id="cb1-7"><a href="#cb1-7"></a>     <span class="dt">xlab =</span> <span class="st">&quot;Sepal Length (cm)&quot;</span>,</span>
-<span id="cb1-8"><a href="#cb1-8"></a>     <span class="dt">ylab =</span> <span class="st">&quot;Sepal Width (cm)&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1">data &lt;-<span class="st"> </span>iris</a>
+<a class="sourceLine" id="cb1-2" data-line-number="2"></a>
+<a class="sourceLine" id="cb1-3" data-line-number="3"><span class="kw">plot</span>(<span class="dt">x =</span> data<span class="op">$</span>Sepal.Length, </a>
+<a class="sourceLine" id="cb1-4" data-line-number="4">     <span class="dt">y =</span> data<span class="op">$</span>Sepal.Width, </a>
+<a class="sourceLine" id="cb1-5" data-line-number="5">     <span class="dt">col =</span> data<span class="op">$</span>Species,</a>
+<a class="sourceLine" id="cb1-6" data-line-number="6">     <span class="dt">pch =</span> <span class="dv">19</span>, </a>
+<a class="sourceLine" id="cb1-7" data-line-number="7">     <span class="dt">xlab =</span> <span class="st">&quot;Sepal Length (cm)&quot;</span>,</a>
+<a class="sourceLine" id="cb1-8" data-line-number="8">     <span class="dt">ylab =</span> <span class="st">&quot;Sepal Width (cm)&quot;</span>)</a></code></pre></div>
 <div class="figure"><span id="fig:morefigs"></span>
 <img src="Poster_files/figure-html/morefigs-1.png" alt="Amazing, right?!" width="80%" />
 <p class="caption">
@@ -577,10 +574,10 @@ Figure 2: Amazing, right?!
 <p>Allaire, JJ, Yihui Xie, Jonathan McPherson, Javier Luraschi, Kevin Ushey, Aron Atkins, Hadley Wickham, Joe Cheng, Winston Chang, and Richard Iannone. 2021. <em>Rmarkdown: Dynamic Documents for R</em>. <a href="https://CRAN.R-project.org/package=rmarkdown">https://CRAN.R-project.org/package=rmarkdown</a>.</p>
 </div>
 <div id="ref-R-posterdown">
-<p>Thorne, Brent. 2019. <em>Posterdown: Generate Pdf Conference Posters Using R Markdown</em>. <a href="https://github.com/brentthorne/posterdown">https://github.com/brentthorne/posterdown</a>.</p>
+<p>Thorne, Brent. 2019. <em>Posterdown: Generate Pdf Conference Posters Using R Markdown</em>. <a href="https://CRAN.R-project.org/package=posterdown">https://CRAN.R-project.org/package=posterdown</a>.</p>
 </div>
 <div id="ref-R-pagedown">
-<p>Xie, Yihui, Romain Lesur, Brent Thorne, and Xianying Tan. 2021. <em>Pagedown: Paginate the Html Output of R Markdown with Css for Print</em>. <a href="https://github.com/rstudio/pagedown">https://github.com/rstudio/pagedown</a>.</p>
+<p>Xie, Yihui, Romain Lesur, Brent Thorne, and Xianying Tan. 2021. <em>Pagedown: Paginate the Html Output of R Markdown with Css for Print</em>. <a href="https://CRAN.R-project.org/package=pagedown">https://CRAN.R-project.org/package=pagedown</a>.</p>
 </div>
 </div>
 </div>
