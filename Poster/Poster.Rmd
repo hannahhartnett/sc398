@@ -26,6 +26,9 @@ bibliography: packages.bib
 knitr::opts_chunk$set(echo = FALSE)
 library(Lahman)
 library(dplyr)
+library(reshape2)
+library(ggplot2)
+library(gridExtra)
 
 data(People)
 people <- People
@@ -59,51 +62,94 @@ by_year$hr_ab = by_year$hr/by_year$ab
 by_year$k_ab = by_year$k/by_year$ab
 ```
 
+```{r, warning = FALSE, message  = FALSE, echo = FALSE, fig.height = 8, out.width='80%', fig.align = "center"}
+# Cole Plot 1
+
+batting <- Batting %>%
+  # select the variables that we want left after we filter the data
+  select(yearID, H, X2B, X3B, HR) %>%
+  # select the years from 1871+
+  filter(yearID >= 1871) %>%
+  group_by(yearID) %>%
+  #  summarise_each(funs(sum(., na.rm=TRUE))) %>%
+  summarise_all(funs(sum(., na.rm=TRUE))) %>%
+  # we summarize by year, and then na.rm takes care of 0's in the data
+  mutate(X1 = H-(X2B+X3B+HR)) %>% #create a column for singles
+  # we eventually want these as a percentage of hits, so we can do the math now
+  mutate(Single = X1/H*100) %>%
+  mutate(Double = X2B/H*100) %>%
+  mutate(Triple = X3B/H*100) %>%
+  mutate(HomeRun = HR/H*100)
+
+bat <- batting %>%
+  select(yearID, Single, Double, Triple, HomeRun)
+
+bat_long <- melt(bat, id.vars = c("yearID"))
+head(bat_long)
+
+hitsperyear <- ggplot(bat_long, aes(x=yearID, y= value, col=variable)) +
+  geom_line() +
+  xlab("Major League Baseball Season") +
+  ylab("Percentage") +
+  ggtitle("Hits by Type in Major League Baseball") +
+  scale_x_continuous(breaks = c(1870, 1885, 1900, 1915, 1930, 1945,
+                                1960, 1975, 1990, 2005, 2020 )) +
+  scale_y_continuous(breaks = c(0, 25, 50, 75, 100))+
+  guides(colour=guide_legend(reverse=TRUE,
+                             aes(ggtitle= "Type of Hit")))
+hitsperyear
+```
+
+```{r, warning = FALSE, message  = FALSE, echo = FALSE, fig.height = 12, out.width='80%', fig.align = "center"}
+# Cole Plot 2
+
+S <- summarize(group_by(Batting, yearID, playerID),
+               H=sum(H), AB=sum(AB),
+               BB=sum(BB), HBP=sum(HBP, na.rm=TRUE),
+               SF=sum(SF, na.rm=TRUE))
+
+ST <- summarize(group_by(Teams, yearID),
+                Games = round(mean(W + L)),
+                min.AB = 3 * Games)
+S2 <- merge(S, ST, by="yearID")
+S.regular <- filter(S2, AB >= min.AB)
+
+SD.data <- summarize(group_by(S.regular, yearID),
+                     SD.AVG = sd(H / AB),
+                     SD.OBP = sd((H + BB + HBP) / (AB + BB + HBP + SF)))
+
+sd_avg <-  ggplot(SD.data, aes(yearID, SD.AVG)) + geom_point() +
+  geom_smooth(se=FALSE, span=0.35) +
+  labs(title = "Standard Deviations of AVG of Regular Hitters",
+       x = "Year", y = "SD of Batting Average")
+
+sd_obp <- ggplot(SD.data, aes(yearID, SD.OBP)) +
+  geom_point() + geom_smooth(se=FALSE, span=0.35) +
+  labs(title = "Standard Deviations of OBP of Regular Hitters",
+       x = "Year", y = "SD of On Base Percentage")
+
+grid.arrange(sd_avg, sd_obp, ncol = 1)
+```
+
+
 # Introduction
 
-Welcome to `posterdown` ! This is my attempt to provide a semi-smooth workflow for those who wish to take their R Markdown skills to the conference world. Most features from R Markdown are available in this package such as Markdown section notation, figure captioning, and even citations like this one [@R-rmarkdown]. The rest of this example poster will show how you can insert typical conference poster features into your own document. 
+
 
 ## Objectives
 
-1. Easy to use reproducible poster design. 
-2. Integration with R Markdown.
-3. Easy transition from `posterdown` to `pagedown` report or manuscript documents [@R-pagedown].
+
 
 # Methods
 
-This package uses the same workflow approach as the R Markdown you know and love. Basically it goes from RMarkdown > Knitr > Markdown > Pandoc > HTML/CSS > PDF. You can even use the bibliography the same way [@R-posterdown].
+
 
 # Results
 
-Usually you want to have a nice table displaying some important results that you have calculated. In `posterdown` this is as easy as using the `kable` table formatting you are probably use to as per typical R Markdown formatting.
 
-You can reference tables like so: Table \@ref(tab:mytable). Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam placerat augue at velit tincidunt semper. Donec elementum porta posuere. Nullam interdum, odio at tincidunt feugiat, turpis nisi blandit eros, eu posuere risus felis non quam. Nam eget lorem odio. Duis et aliquet orci. Phasellus nec viverra est.
-
-```{r mytable, out.width='80%'}
-knitr::kable(iris[1:10, 1:4], caption = 'Table caption.',align = 'c',"html")
-```
-
-Or with figures: Figure \@ref(fig:standard-plot), or Figure \@ref(fig:morefigs).
-
-```{r standard-plot, out.width='80%', fig.align='center', fig.cap='Great figure!', fig.height=5}
-plot(mtcars[1:2])
-```
-
-```{r morefigs, out.width='80%', echo=TRUE, fig.cap='Amazing, right?!', fig.height=5}
-data <- iris
-
-plot(x = data$Sepal.Length, 
-     y = data$Sepal.Width, 
-     col = data$Species,
-     pch = 19, 
-     xlab = "Sepal Length (cm)",
-     ylab = "Sepal Width (cm)")
-
-```
 
 # Next Steps
 
-Aliquam sed faucibus risus, quis efficitur erat. Vestibulum semper mauris quis tempus eleifend. Aliquam sagittis dictum ipsum, quis viverra ligula eleifend ut. Curabitur sagittis vitae arcu eget faucibus. In non elementum felis. Duis et aliquam nunc. Nunc pulvinar sapien nunc, vel pretium nisi efficitur in. Fusce fringilla maximus leo et maximus. Fusce at ligula laoreet, iaculis mi at, auctor odio. Praesent sed elementum justo. Aenean consectetur risus rhoncus tincidunt efficitur. Praesent dictum mauris at diam maximus maximus [@R-posterdown].
 
 # Conclusion
 
