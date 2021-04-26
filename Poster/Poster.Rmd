@@ -1,6 +1,6 @@
 ---
 title: |
-    | How Has Major Leage Baseball Changed Over Time?
+    | How Has Major League Baseball Changed Over Time?
     | Exploring the Lahman's Baseball Database
 author:
   - name: Frank Driscoll
