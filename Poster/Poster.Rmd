@@ -68,7 +68,7 @@ baseball_theme <-  theme_gray() + # White background, black and white theme
 
 # Introduction
 
-Baseball is a very old sport, and the Major League Baseball association in the U.S. has been around for almost 120 years. We decided to dive into the in-depth historical database that chronicles the sport in order to examine how it has changed over time.
+The Major League Baseball association has served as America's pastime's highest level of competition for almost 120 years. We dive into the in-depth historical database that chronicles the sport in order to examine how hitting has changed over time.
 
 # The Database
 
@@ -126,6 +126,8 @@ ggplot(data = lo_tri_reordered, aes(x = Var1, y = Var2, fill = value)) +
 
 ```
 
+We began with a high-level analysis of correlations between variables. Unsurprisingly, the number of games, hits, at bats, runs, and runs batted in are very highly positively correlated. There are no negatively correlated pairs of variables, though sacrifice hits have essentially no association with either home runs or intentional walks.
+
 # Exploring HRs per AB
 
 ```{r, warning = FALSE, message  = FALSE, echo = FALSE, fig.height = 4, out.width='100%', fig.align = "center"}
@@ -150,7 +152,7 @@ years <- ggplot()+
 years
 ```
 
-Over the years, both home runs and strikeouts have increased, indicating a transition from small ball baseball with
+Over the years, both home runs and strikeouts have increased, indicating a transition from small ball baseball
 where pitchers throw to contact, to high power baseball where stronger hitters try to hit home runs and pitchers
 with increased velocity go for strikeouts.
 
