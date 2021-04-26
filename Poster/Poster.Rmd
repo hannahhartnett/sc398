@@ -70,9 +70,13 @@ baseball_theme <-  theme_gray() + # White background, black and white theme
 
 The Major League Baseball association has served as America's pastime's highest level of competition for almost 120 years. We dive into the in-depth historical database that chronicles the sport in order to examine how hitting has changed over time.
 
+<br>
+
 # The Database
 
 Lahman's Baseball Database is part of the Comprehensive R  Archive Network. The updated version of the database contains complete batting and pitching statistics from 1871 to 2020, plus fielding statistics, standings, team stats, managerial records, post-season data, and more.
+
+<br>
 
 # Looking at Continuous Hit Data
 <div style="margin-bottom:100px;">
@@ -128,6 +132,10 @@ ggplot(data = lo_tri_reordered, aes(x = Var1, y = Var2, fill = value)) +
 
 We began with a high-level analysis of correlations between variables. Unsurprisingly, the number of games, hits, at bats, runs, and runs batted in are very highly positively correlated. There are no negatively correlated pairs of variables, though sacrifice hits have essentially no association with either home runs or intentional walks.
 
+<br>
+<br>
+<br>
+
 
 
 </div>
@@ -144,6 +152,8 @@ density
 
 The distribution of HR/AB by year has a two peaked distribution, with the first at around 0.05 representing the high concentration of low HR/AB numbers in the early years and the second at around 0.025 representing a concentration of higher HR/AB seasons. There is a decent right skew representing the rapid increase in HR/AB in recent years.
 
+<br>
+
 # What influences number of home runs hit?
 
 ```{r, warning = FALSE, message  = FALSE, echo = FALSE, fig.height = 4, out.width='100%', fig.align = "center"}
@@ -159,6 +169,16 @@ years + baseball_theme
 Over the years, both home runs and strikeouts have increased, indicating a transition from small ball baseball
 where pitchers throw to contact, to high power baseball where stronger hitters try to hit home runs and pitchers
 with increased velocity go for strikeouts.
+
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
 
 # Exploring Hit Type
 
@@ -206,6 +226,9 @@ hitsperyear
 
 Similarly, we see an increase in homeruns and doubles hit over time, corresponding with a decrease in singles and triples. There is a particularly large increase in home runs and decrease in singles in the last ten years.
 
+
+<br>
+
 # Batting Average getting Lower?
 
 ```{r, warning = FALSE, message  = FALSE, echo = FALSE, fig.height = 6, out.width='100%', fig.align = "center"}
@@ -247,6 +270,8 @@ grid.arrange(sd_avg, sd_obp, ncol = 1)
 
 
 A recent study theorized that the disappearance of the 0.400 batting average in baseball is caused by the steady decrease of batting averages among “regular” players overtime, perhaps related to the earlier claim of pitchers with high velocity attempting more strikeouts. The great hitters are moving closer to the average because of this smaller variation, so fewer athletes have been able to reach the 0.400 batting average mark. In the top plot, we see that the standard deviation of batting average for so called “regular” players has decreased over time, but it has been very consistent in the last 60 years. We also see a drop in the standard deviation of on-base percentage, shown in the bottom plot.
+
+
 
 # Hitting Statistics Rising
 
@@ -305,6 +330,7 @@ statperyear + baseball_theme
 ```
 
 
+<br>
 
 ```{r, warning = FALSE, message  = FALSE, echo = FALSE, fig.height = 4, out.width='100%', fig.align = "center"}
 mvp2 <- mutate( mvp,
@@ -331,6 +357,10 @@ plotA <- ggplot(advStatYear2, aes(x = yearID, y = value)) +
 plotA + coord_polar(theta = 'x') +
   theme(colour = 'navy', axis.text.x = element_text(size = 5),  axis.ticks = element_blank(), axis.text.y = element_blank()) +baseball_theme
 ```
+
+
+<br>
+
 
 # Awards and Hitting Relationship
 
@@ -397,6 +427,9 @@ ggplot(filter(awards_hit_type_marginal, awardID == 'Outstanding DH Award' | awar
 ```
 
 Unsurprisingly, the players who have received awards specific to hitting, like Outstanding Designated Hitter, have much higher home run totals and fewer singles than nonspecific awards, like MVP. Those players who have received awards unrelated to hitting, like the Cy Young Award for pitching, have the fewest collective home runs and the most singles. 
+
+
+<br>
 
 # Sources
 
