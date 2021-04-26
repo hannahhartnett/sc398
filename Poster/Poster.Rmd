@@ -66,79 +66,15 @@ baseball_theme <-  theme_gray() + # White background, black and white theme
         text = element_text(size = 10, face = "bold", color = "azure4", family = 'Georgia'))
 ```
 
-```{r, warning = FALSE, message  = FALSE, echo = FALSE, fig.height = 4, out.width='100%', fig.align = "center"}
-# Cole Plot 1
-
-batting <- Batting %>%
-  # select the variables that we want left after we filter the data
-  select(yearID, H, X2B, X3B, HR) %>%
-  # select the years from 1871+
-  filter(yearID >= 1871) %>%
-  group_by(yearID) %>%
-  #  summarise_each(funs(sum(., na.rm=TRUE))) %>%
-  summarise_all(funs(sum(., na.rm=TRUE))) %>%
-  # we summarize by year, and then na.rm takes care of 0's in the data
-  mutate(X1 = H-(X2B+X3B+HR)) %>% #create a column for singles
-  # we eventually want these as a percentage of hits, so we can do the math now
-  mutate(Single = X1/H*100) %>%
-  mutate(Double = X2B/H*100) %>%
-  mutate(Triple = X3B/H*100) %>%
-  mutate(HomeRun = HR/H*100)
-
-bat <- batting %>%
-  select(yearID, Single, Double, Triple, HomeRun)
-
-bat_long <- melt(bat, id.vars = c("yearID"))
-
-hitsperyear <- ggplot(bat_long, aes(x=yearID, y= value, col=variable)) +
-  geom_line() +
-  xlab("Major League Baseball Season") +
-  ylab("Percentage") +
-  ggtitle("Hits by Type in Major League Baseball") +
-  scale_x_continuous(breaks = c(1870, 1885, 1900, 1915, 1930, 1945,
-                                1960, 1975, 1990, 2005, 2020 )) +
-  scale_y_continuous(breaks = c(0, 25, 50, 75, 100))+
-  guides(colour=guide_legend(reverse=TRUE,
-                             aes(ggtitle= "Type of Hit"))) +
-  baseball_theme +
-  scale_colour_manual(values = c('navy', 'indianred1', 'palegreen4', 'mediumpurple3'))
+# Introduction
 
 
-hitsperyear
-```
 
-```{r, warning = FALSE, message  = FALSE, echo = FALSE, fig.height = 6, out.width='100%', fig.align = "center"}
-# Cole Plot 2
+# The Database
 
-S <- summarize(group_by(Batting, yearID, playerID),
-               H=sum(H), AB=sum(AB),
-               BB=sum(BB), HBP=sum(HBP, na.rm=TRUE),
-               SF=sum(SF, na.rm=TRUE))
+Lahman's Baseball Database is part of the Comprehensive R  Archive Network. The updated version of the database contains complete batting and pitching statistics from 1871 to 2020, plus fielding statistics, standings, team stats, managerial records, post-season data, and more.
 
-ST <- summarize(group_by(Teams, yearID),
-                Games = round(mean(W + L)),
-                min.AB = 3 * Games)
-S2 <- merge(S, ST, by="yearID")
-S.regular <- filter(S2, AB >= min.AB)
-
-SD.data <- summarize(group_by(S.regular, yearID),
-                     SD.AVG = sd(H / AB),
-                     SD.OBP = sd((H + BB + HBP) / (AB + BB + HBP + SF)))
-
-sd_avg <-  ggplot(SD.data, aes(yearID, SD.AVG)) + geom_point() +
-  geom_smooth(colour = 'navy', se=FALSE, span=0.35) +
-  labs(title = "Standard Deviations of AVG of Regular Hitters",
-       x = "Year", y = "SD of Batting Average") +
-  baseball_theme
-
-sd_obp <- ggplot(SD.data, aes(yearID, SD.OBP)) +
-  geom_point() + geom_smooth(colour = 'navy', se=FALSE, span=0.35) +
-  labs(title = "Standard Deviations of OBP of Regular Hitters",
-       x = "Year", y = "SD of On Base Percentage") +
-  baseball_theme
-grid.arrange(sd_avg, sd_obp, ncol = 1)
-```
-
+# Looking at Continuous Hit Data
 
 ```{r, warning = FALSE, message  = FALSE, echo = FALSE, fig.height = 6, out.width='100%', fig.align = "center"}
 
@@ -190,13 +126,86 @@ ggplot(data = lo_tri_reordered, aes(x = Var1, y = Var2, fill = value)) +
 
 ```
 
-# Introduction
+# Exploring Hit Type
+
+```{r, warning = FALSE, message  = FALSE, echo = FALSE, fig.height = 4, out.width='100%', fig.align = "center"}
+# Cole Plot 1
+
+batting <- Batting %>%
+  # select the variables that we want left after we filter the data
+  select(yearID, H, X2B, X3B, HR) %>%
+  # select the years from 1871+
+  filter(yearID >= 1871) %>%
+  group_by(yearID) %>%
+  #  summarise_each(funs(sum(., na.rm=TRUE))) %>%
+  summarise_all(funs(sum(., na.rm=TRUE))) %>%
+  # we summarize by year, and then na.rm takes care of 0's in the data
+  mutate(X1 = H-(X2B+X3B+HR)) %>% #create a column for singles
+  # we eventually want these as a percentage of hits, so we can do the math now
+  mutate(Single = X1/H*100) %>%
+  mutate(Double = X2B/H*100) %>%
+  mutate(Triple = X3B/H*100) %>%
+  mutate(HomeRun = HR/H*100)
+
+bat <- batting %>%
+  select(yearID, Single, Double, Triple, HomeRun)
+
+bat_long <- melt(bat, id.vars = c("yearID"))
+
+hitsperyear <- ggplot(bat_long, aes(x=yearID, y= value, col=variable)) +
+  geom_line() +
+  xlab("Major League Baseball Season") +
+  ylab("Percentage") +
+  ggtitle("Hits by Type in Major League Baseball") +
+  scale_x_continuous(breaks = c(1870, 1885, 1900, 1915, 1930, 1945,
+                                1960, 1975, 1990, 2005, 2020 )) +
+  scale_y_continuous(breaks = c(0, 25, 50, 75, 100))+
+  guides(colour=guide_legend(reverse=TRUE,
+                             aes(ggtitle= "Type of Hit"))) +
+  baseball_theme +
+  scale_colour_manual(values = c('navy', 'indianred1', 'palegreen4', 'mediumpurple3'))
 
 
+hitsperyear
+```
 
-# The Database
+It looks like that baseball has adapted over time so that less singles are being hit, while more doubles and home runs are being hit, and triples are becoming  less common. There is a particularly large increase in home runs in the last 10 years, and a particularly large decrease in singles in the last ten years.
 
+# Batting Average getting Lower?
 
+```{r, warning = FALSE, message  = FALSE, echo = FALSE, fig.height = 6, out.width='100%', fig.align = "center"}
+# Cole Plot 2
+
+S <- summarize(group_by(Batting, yearID, playerID),
+               H=sum(H), AB=sum(AB),
+               BB=sum(BB), HBP=sum(HBP, na.rm=TRUE),
+               SF=sum(SF, na.rm=TRUE))
+
+ST <- summarize(group_by(Teams, yearID),
+                Games = round(mean(W + L)),
+                min.AB = 3 * Games)
+S2 <- merge(S, ST, by="yearID")
+S.regular <- filter(S2, AB >= min.AB)
+
+SD.data <- summarize(group_by(S.regular, yearID),
+                     SD.AVG = sd(H / AB),
+                     SD.OBP = sd((H + BB + HBP) / (AB + BB + HBP + SF)))
+
+sd_avg <-  ggplot(SD.data, aes(yearID, SD.AVG)) + geom_point() +
+  geom_smooth(colour = 'navy', se=FALSE, span=0.35) +
+  labs(title = "Standard Deviations of AVG of Regular Hitters",
+       x = "Year", y = "SD of Batting Average") +
+  baseball_theme
+
+sd_obp <- ggplot(SD.data, aes(yearID, SD.OBP)) +
+  geom_point() + geom_smooth(colour = 'navy', se=FALSE, span=0.35) +
+  labs(title = "Standard Deviations of OBP of Regular Hitters",
+       x = "Year", y = "SD of On Base Percentage") +
+  baseball_theme
+grid.arrange(sd_avg, sd_obp, ncol = 1)
+```
+
+There was a recent study about the disappearance of the 0.400 batting average in baseball. It was theorized that this is because the batting average among “regular” players is steadily decreasing overtime, and that great hitters are moving closer to the average because of this smaller variation, so less baseball athletes have been able to reach the 0.400 batting average mark. From the top plot, we can see that the standard deviation of batting average for so called “regular” players has decreased over time, but it has been very consistent in the last 60 years. A different batting statistic, that has seen more of a drop recently, is the standard deviation for on base percentage which is shown in bottom plot.
 
 # Sources
 
