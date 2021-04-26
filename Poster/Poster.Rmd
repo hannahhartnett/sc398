@@ -63,7 +63,7 @@ by_year$k_ab = by_year$k/by_year$ab
 # establish theme of graphs
 baseball_theme <-  theme_gray() + # White background, black and white theme
   theme(axis.text = element_text(size = 10, color = "azure4"),
-        text = element_text(size = 10, face = "bold", color = "azure4", family = 'Georgia'))
+        text = element_text(size = 10, face = "bold", color = "azure4", family = 'Palatino'))
 ```
 
 # Introduction
@@ -149,7 +149,7 @@ years <- ggplot()+
   scale_colour_manual(name = 'Metric',
                       values =c('blue'='navy','red'='indianred1'), labels = c('HR/AB','K/AB'))+
   labs(x = "Year", y = "Metric/AB", title = "HR/AB and K/AB by Year")
-years
+years + baseball_theme
 ```
 
 Over the years, both home runs and strikeouts have increased, indicating a transition from small ball baseball
@@ -326,7 +326,7 @@ plotA <- ggplot(advStatYear2, aes(x = yearID, y = value)) +
   geom_bar(stat = "identity") + facet_grid(. ~ variable)
 
 plotA + coord_polar(theta = 'x') +
-  theme(axis.text.x = element_text(size = 5),  axis.ticks = element_blank(), axis.text.y = element_blank()) +baseball_theme
+  theme(colour = 'navy', axis.text.x = element_text(size = 5),  axis.ticks = element_blank(), axis.text.y = element_blank()) +baseball_theme
 ```
 
 # Awards and Hitting Relationship
