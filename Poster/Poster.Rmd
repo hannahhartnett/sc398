@@ -391,7 +391,7 @@ ggplot(filter(awards_hit_type_marginal, awardID == 'Outstanding DH Award' | awar
   scale_fill_manual(values = c('navy', 'indianred1', 'palegreen4', 'mediumpurple3'))
 ```
 
-
+Unsurprisingly, the players who have received awards specific to hitting, like Outstanding Designated Hitter, have much higher home run totals and fewer singles than nonspecific awards, like MVP. Those players who have received awards unrelated to hitting, like the Cy Young Award for pitching, have the fewest collective home runs and the most singles. 
 
 # Sources
 
