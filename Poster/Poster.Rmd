@@ -242,7 +242,7 @@ grid.arrange(sd_avg, sd_obp, ncol = 1)
 ```
 
 
-A recent study theorized that the disappearance of the 0.400 batting average in baseball is caused by the steady decrease of batting averages among “regular” players overtime, perhaps related to the earlier claim of pitchers with high velocity attempting more strikeouts. The great hitters are moving closer to the average because of this smaller variation, so fewer athletes have been able to reach the 0.400 batting average mark. In the top plot, we see that the standard deviation of batting average for so called “regular” players has decreased over time, but it has been very consistent in the last 60 years. A different batting statistic, that has seen more of a drop recently, is the standard deviation for on base percentage which is shown in bottom plot.
+A recent study theorized that the disappearance of the 0.400 batting average in baseball is caused by the steady decrease of batting averages among “regular” players overtime, perhaps related to the earlier claim of pitchers with high velocity attempting more strikeouts. The great hitters are moving closer to the average because of this smaller variation, so fewer athletes have been able to reach the 0.400 batting average mark. In the top plot, we see that the standard deviation of batting average for so called “regular” players has decreased over time, but it has been very consistent in the last 60 years. We also see a drop in the standard deviation of on-base percentage, shown in the bottom plot.
 
 # Hitting Statistics Rising
 
