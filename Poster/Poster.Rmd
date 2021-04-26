@@ -29,6 +29,7 @@ library(dplyr)
 library(reshape2)
 library(ggplot2)
 library(gridExtra)
+library(viridis)
 
 data(People)
 people <- People
@@ -60,6 +61,11 @@ by_year <- batting %>%
 
 by_year$hr_ab = by_year$hr/by_year$ab
 by_year$k_ab = by_year$k/by_year$ab
+
+# establish theme of graphs
+baseball_theme <-  theme_gray() + # White background, black and white theme
+  theme(axis.text = element_text(size = 10, color = "azure4"),
+        text = element_text(size = 10, face = "bold", color = "azure4", family = 'Georgia'))
 ```
 
 ```{r, warning = FALSE, message  = FALSE, echo = FALSE, fig.height = 8, out.width='80%', fig.align = "center"}
@@ -96,7 +102,11 @@ hitsperyear <- ggplot(bat_long, aes(x=yearID, y= value, col=variable)) +
                                 1960, 1975, 1990, 2005, 2020 )) +
   scale_y_continuous(breaks = c(0, 25, 50, 75, 100))+
   guides(colour=guide_legend(reverse=TRUE,
-                             aes(ggtitle= "Type of Hit")))
+                             aes(ggtitle= "Type of Hit"))) +
+  baseball_theme +
+  scale_colour_manual(values = c('navy', 'indianred1', 'palegreen4', 'mediumpurple3'))
+
+
 hitsperyear
 ```
 
@@ -119,18 +129,69 @@ SD.data <- summarize(group_by(S.regular, yearID),
                      SD.OBP = sd((H + BB + HBP) / (AB + BB + HBP + SF)))
 
 sd_avg <-  ggplot(SD.data, aes(yearID, SD.AVG)) + geom_point() +
-  geom_smooth(se=FALSE, span=0.35) +
+  geom_smooth(colour = 'navy', se=FALSE, span=0.35) +
   labs(title = "Standard Deviations of AVG of Regular Hitters",
-       x = "Year", y = "SD of Batting Average")
+       x = "Year", y = "SD of Batting Average") +
+  baseball_theme
 
 sd_obp <- ggplot(SD.data, aes(yearID, SD.OBP)) +
-  geom_point() + geom_smooth(se=FALSE, span=0.35) +
+  geom_point() + geom_smooth(colour = 'navy', se=FALSE, span=0.35) +
   labs(title = "Standard Deviations of OBP of Regular Hitters",
-       x = "Year", y = "SD of On Base Percentage")
-
+       x = "Year", y = "SD of On Base Percentage") +
+  baseball_theme
 grid.arrange(sd_avg, sd_obp, ncol = 1)
 ```
 
+
+```{r, warning = FALSE, message  = FALSE, echo = FALSE, fig.height = 6, out.width='100%', fig.align = "center"}
+
+# Hannah plot 1
+# take continuous variables
+batting_continuous <- Batting %>% select(G, AB, R, H, X2B, X3B, HR, RBI, SB, CS, BB, SO, IBB, HBP, SH, SF, GIDP)
+
+cormat <- round(cor(batting_continuous, use = 'complete.obs'), 2)
+
+
+library(reshape2)
+melted_cormat <- melt(cormat)
+
+
+reorder_cormat <- function(cormat){
+  # Use correlation between variables as basis for distance
+  dd <- as.dist(1-abs(cormat))
+  hc <- hclust(dd)
+  cormat <- cormat[hc$order, hc$order]
+  return(cormat)
+}
+
+# Function to get lower triangle of corr matrix
+get_lower_tri <- function(cormat){
+  cormat[upper.tri(cormat)] <- NA
+  return(cormat)
+}
+
+lo_tri_reordered <- cormat %>%
+  reorder_cormat %>%
+  get_lower_tri %>%
+  melt
+
+
+ggplot(data = lo_tri_reordered, aes(x = Var1, y = Var2, fill = value)) +
+  geom_tile() +
+  labs(x = 'Batting Variable',
+       y = 'Batting Variable',
+       title = 'Correlation Heat Map for Continuous Batting Variables',
+       fill = 'Correlation') +
+  baseball_theme +
+  theme(axis.text.x = element_text(angle = 45)) +
+  scale_fill_gradient2(
+  low = "indianred1",
+  mid = "white",
+  high = "navy",
+  midpoint = 0,
+  limits = c(-1, 1))
+
+```
 
 # Introduction
 
