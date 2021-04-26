@@ -202,7 +202,7 @@ hitsperyear <- ggplot(bat_long, aes(x=yearID, y= value, col=variable)) +
 hitsperyear
 ```
 
-It looks like that baseball has adapted over time so that less singles are being hit, while more doubles and home runs are being hit, and triples are becoming  less common. There is a particularly large increase in home runs in the last 10 years, and a particularly large decrease in singles in the last ten years.
+Similarly, we see an increase in homeruns and doubles hit over time, corresponding with a decrease in singles and triples. There is a particularly large increase in home runs and decrease in singles in the last ten years.
 
 # Batting Average getting Lower?
 
@@ -242,7 +242,7 @@ grid.arrange(sd_avg, sd_obp, ncol = 1)
 ```
 
 
-There was a recent study about the disappearance of the 0.400 batting average in baseball. It was theorized that this is because the batting average among “regular” players is steadily decreasing overtime, and that great hitters are moving closer to the average because of this smaller variation, so less baseball athletes have been able to reach the 0.400 batting average mark. From the top plot, we can see that the standard deviation of batting average for so called “regular” players has decreased over time, but it has been very consistent in the last 60 years. A different batting statistic, that has seen more of a drop recently, is the standard deviation for on base percentage which is shown in bottom plot.
+A recent study theorized that the disappearance of the 0.400 batting average in baseball is caused by the steady decrease of batting averages among “regular” players overtime, perhaps related to the earlier claim of pitchers with high velocity attempting more strikeouts. The great hitters are moving closer to the average because of this smaller variation, so fewer athletes have been able to reach the 0.400 batting average mark. In the top plot, we see that the standard deviation of batting average for so called “regular” players has decreased over time, but it has been very consistent in the last 60 years. A different batting statistic, that has seen more of a drop recently, is the standard deviation for on base percentage which is shown in bottom plot.
 
 # Hitting Statistics Rising
 
