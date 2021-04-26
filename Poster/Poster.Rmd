@@ -126,6 +126,32 @@ ggplot(data = lo_tri_reordered, aes(x = Var1, y = Var2, fill = value)) +
 
 ```
 
+# Exploring HRs per AB
+
+```{r, warning = FALSE, message  = FALSE, echo = FALSE, fig.height = 4, out.width='100%', fig.align = "center"}
+density <- ggplot(by_year, aes(x = hr_ab))+
+  geom_density()+
+  labs(x = "HR/AB", y = "Density of HR/AB by Year", title = "Density distribution of HR/AB from 1871-2020") + baseball_theme
+
+density
+```
+
+# What influences number of home runs hit?
+
+```{r, warning = FALSE, message  = FALSE, echo = FALSE, fig.height = 4, out.width='100%', fig.align = "center"}
+years <- ggplot()+
+  geom_line(data = by_year, aes(x = yearID, y = hr_ab, color = "blue")) +
+  geom_line(data = by_year, aes(x = yearID, y = k_ab, color = "red")) +
+  scale_colour_manual(name = 'Metric',
+                      values =c('blue'='blue','red'='red'), labels = c('HR/AB','K/AB'))+
+  labs(x = "Year", y = "Metric/AB", title = "HR/AB and K/AB by Year")
+years
+```
+
+Over the years, both home runs and strikeouts have increased, indicating a transition from small ball baseball with
+where pitchers throw to contact, to high power baseball where stronger hitters try to hit home runs and pitchers
+with increased velocity go for strikeouts.
+
 # Exploring Hit Type
 
 ```{r, warning = FALSE, message  = FALSE, echo = FALSE, fig.height = 4, out.width='100%', fig.align = "center"}
@@ -151,6 +177,8 @@ bat <- batting %>%
   select(yearID, Single, Double, Triple, HomeRun)
 
 bat_long <- melt(bat, id.vars = c("yearID"))
+
+# bat_long <- bat_long %>% mutate(day = fct_relevel(factor(day), c("Thu", "Fri", "Sat", "Sun")))
 
 hitsperyear <- ggplot(bat_long, aes(x=yearID, y= value, col=variable)) +
   geom_line() +
@@ -212,18 +240,7 @@ grid.arrange(sd_avg, sd_obp, ncol = 1)
 
 There was a recent study about the disappearance of the 0.400 batting average in baseball. It was theorized that this is because the batting average among “regular” players is steadily decreasing overtime, and that great hitters are moving closer to the average because of this smaller variation, so less baseball athletes have been able to reach the 0.400 batting average mark. From the top plot, we can see that the standard deviation of batting average for so called “regular” players has decreased over time, but it has been very consistent in the last 60 years. A different batting statistic, that has seen more of a drop recently, is the standard deviation for on base percentage which is shown in bottom plot.
 
-# What influences number of home runs hit?
-
-```{r, warning = FALSE, message  = FALSE, echo = FALSE, fig.height = 4, out.width='100%', fig.align = "center"}
-years <- ggplot()+
-  geom_line(data = by_year, aes(x = yearID, y = hr_ab, color = "blue")) +
-  geom_line(data = by_year, aes(x = yearID, y = k_ab, color = "red")) +
-  scale_colour_manual(name = 'Metric',
-                      values =c('blue'='blue','red'='red'), labels = c('HR/AB','K/AB'))+
-  labs(x = "Year", y = "Metric/AB", title = "HR/AB and K/AB by Year")
-years
-```
-
+# Hitting Statistics Rising
 
 ```{r, warning = FALSE, message  = FALSE, echo = FALSE, fig.height = 4, out.width='100%', fig.align = "center"}
 library(reshape2)
@@ -280,6 +297,7 @@ statperyear <- ggplot(advStatYear, aes(x = yearID, y = value)) +
 statperyear + baseball_theme
 ```
 
+# 
 
 ```{r, warning = FALSE, message  = FALSE, echo = FALSE, fig.height = 4, out.width='100%', fig.align = "center"}
 mvp2 <- mutate( mvp,
@@ -307,6 +325,7 @@ plotA + coord_polar(theta = 'x') +
   theme(axis.text.x = element_text(size = 5),  axis.ticks = element_blank(), axis.text.y = element_blank()) +baseball_theme
 ```
 
+# Awards and Hitting Relationship
 
 ```{r, warning = FALSE, message  = FALSE, echo = FALSE, fig.height = 4, out.width='100%', fig.align = "center"}
 data(AwardsPlayers, package = 'Lahman')
@@ -364,8 +383,10 @@ ggplot(filter(awards_hit_type_marginal, awardID == 'Outstanding DH Award' | awar
        y = 'Percentage of Hit Type',
        fill = 'Hit Type',
        title = 'Number of Singles Hit Varies by Award Type') +
-  baseball_theme
+  baseball_theme +
+  scale_fill_manual(values = c('navy', 'indianred1', 'palegreen4', 'mediumpurple3'))
 ```
+
 
 
 # Sources
