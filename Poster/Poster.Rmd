@@ -224,7 +224,7 @@ SD.data <- summarize(group_by(S.regular, yearID),
                      SD.AVG = sd(H / AB),
                      SD.OBP = sd((H + BB + HBP) / (AB + BB + HBP + SF)))
 
-sd_avg <-  ggplot(SD.data, aes(yearID, SD.AVG)) + geom_point() +
+sd_avg <-  ggplot(SD.data, aes(yearID, SD.AVG)) + geom_point(colour = 'navy') +
   geom_smooth(colour = 'navy', se=FALSE, span=0.35) +
   labs(title = "Standard Deviations of AVG of Regular Hitters",
        x = "Year", y = "SD of Batting Average") +
@@ -233,7 +233,7 @@ sd_avg <-  ggplot(SD.data, aes(yearID, SD.AVG)) + geom_point() +
   
 
 sd_obp <- ggplot(SD.data, aes(yearID, SD.OBP)) +
-  geom_point() + geom_smooth(colour = 'navy', se=FALSE, span=0.35) +
+  geom_point(colour = 'navy') + geom_smooth(colour = 'navy', se=FALSE, span=0.35) +
   labs(title = "Standard Deviations of OBP of Regular Hitters",
        x = "Year", y = "SD of On Base Percentage") +
   baseball_theme +
@@ -286,11 +286,11 @@ advStat <- Bstats %>%
 advStatYear <- melt(advStat, id.vars = c("yearID"))
 
 statperyear <- ggplot(advStatYear, aes(x = yearID, y = value)) +
-  geom_point(color = "red") +
-  geom_smooth(method = loess, se = TRUE, color = "black") +
+  geom_point(color = "navy", size = 1) +
+  geom_smooth(method = loess, se = TRUE, color = "navy") +
   xlab("Major League Baseball Season") +
   ylab("Overall Values") +
-  ggtitle("Cumulative Advanced Hitting Statistics rising over time in the MLB") +
+  ggtitle("Cumulative Advanced Hitting Statistics Rising Over Time in the MLB") +
   scale_x_continuous(breaks = c(1870, 1900,  1930,
                                 1960, 1990,  2020 )) +
   guides(colour=guide_legend(reverse=TRUE,
