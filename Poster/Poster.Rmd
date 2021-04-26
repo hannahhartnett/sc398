@@ -1,19 +1,17 @@
 ---
-title: Generate Reproducible & Live HTML and PDF Conference Posters Using RMarkdown
+title: |
+    | How Has Major Leage Baseball Changed Over Time?
+    | Exploring the Lahman's Baseball Database
 author:
   - name: Frank Driscoll
-    affil: 1
   - name: Cam Garfield
-    affil: 1
   - name: Cole Guerin
-    affil: 1
   - name: Hannah Hartnett
-    affil: 1
+    
   
 affiliation:
-  - num: 1
-    address: Statistical Graphics, Colby College
-column_numbers: 3
+  - address: Statistical Graphics, Colby College
+column_numbers: 4
 logoright_name: https&#58;//raw.githubusercontent.com/brentthorne/posterdown/master/images/betterhexlogo.png
 logoleft_name: https&#58;//raw.githubusercontent.com/brentthorne/posterdown/master/images/betterhexlogo.png
 output: 
@@ -68,7 +66,7 @@ baseball_theme <-  theme_gray() + # White background, black and white theme
         text = element_text(size = 10, face = "bold", color = "azure4", family = 'Georgia'))
 ```
 
-```{r, warning = FALSE, message  = FALSE, echo = FALSE, fig.height = 8, out.width='80%', fig.align = "center"}
+```{r, warning = FALSE, message  = FALSE, echo = FALSE, fig.height = 4, out.width='100%', fig.align = "center"}
 # Cole Plot 1
 
 batting <- Batting %>%
@@ -91,7 +89,6 @@ bat <- batting %>%
   select(yearID, Single, Double, Triple, HomeRun)
 
 bat_long <- melt(bat, id.vars = c("yearID"))
-head(bat_long)
 
 hitsperyear <- ggplot(bat_long, aes(x=yearID, y= value, col=variable)) +
   geom_line() +
@@ -110,7 +107,7 @@ hitsperyear <- ggplot(bat_long, aes(x=yearID, y= value, col=variable)) +
 hitsperyear
 ```
 
-```{r, warning = FALSE, message  = FALSE, echo = FALSE, fig.height = 12, out.width='80%', fig.align = "center"}
+```{r, warning = FALSE, message  = FALSE, echo = FALSE, fig.height = 6, out.width='100%', fig.align = "center"}
 # Cole Plot 2
 
 S <- summarize(group_by(Batting, yearID, playerID),
@@ -197,27 +194,12 @@ ggplot(data = lo_tri_reordered, aes(x = Var1, y = Var2, fill = value)) +
 
 
 
-## Objectives
+# The Database
 
 
 
-# Methods
+# Sources
 
+Lahman's Baseball Database 
 
-
-# Results
-
-
-
-# Next Steps
-
-
-# Conclusion
-
-Try `posterdown` out! Hopefully you like it!
-
-```{r, include=FALSE}
-knitr::write_bib(c('knitr','rmarkdown','posterdown','pagedown'), 'packages.bib')
-```
-
-# References
+http://www.seanlahman.com/baseball-archive/statistics/
