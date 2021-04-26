@@ -147,7 +147,7 @@ years <- ggplot()+
   geom_line(data = by_year, aes(x = yearID, y = hr_ab, color = "blue")) +
   geom_line(data = by_year, aes(x = yearID, y = k_ab, color = "red")) +
   scale_colour_manual(name = 'Metric',
-                      values =c('blue'='blue','red'='red'), labels = c('HR/AB','K/AB'))+
+                      values =c('blue'='navy','red'='indianred1'), labels = c('HR/AB','K/AB'))+
   labs(x = "Year", y = "Metric/AB", title = "HR/AB and K/AB by Year")
 years
 ```
