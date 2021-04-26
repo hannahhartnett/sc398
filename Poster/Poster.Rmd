@@ -28,6 +28,7 @@ library(reshape2)
 library(ggplot2)
 library(gridExtra)
 library(viridis)
+library(forcats)
 
 data(People)
 people <- People
@@ -182,8 +183,6 @@ bat <- batting %>%
 
 bat_long <- melt(bat, id.vars = c("yearID"))
 
-# bat_long <- bat_long %>% mutate(day = fct_relevel(factor(day), c("Thu", "Fri", "Sat", "Sun")))
-
 hitsperyear <- ggplot(bat_long, aes(x=yearID, y= value, col=variable)) +
   geom_line() +
   xlab("Major League Baseball Season") +
@@ -192,7 +191,7 @@ hitsperyear <- ggplot(bat_long, aes(x=yearID, y= value, col=variable)) +
   scale_x_continuous(breaks = c(1870, 1885, 1900, 1915, 1930, 1945,
                                 1960, 1975, 1990, 2005, 2020 )) +
   scale_y_continuous(breaks = c(0, 25, 50, 75, 100))+
-  guides(colour=guide_legend(reverse=TRUE,
+  guides(colour=guide_legend(reverse=FALSE,
                              aes(ggtitle= "Type of Hit"))) +
   baseball_theme +
   scale_colour_manual(values = c('navy', 'indianred1', 'palegreen4', 'mediumpurple3')) +
@@ -379,6 +378,8 @@ awards_hit_type_marginal <- mutate(awards_hit_type_marginal,
                                   "Double" = "X2B",
                                   "Triple" = "X3B",
                                   "Home Run" = "HR"))
+
+awards_hit_type_marginal <- awards_hit_type_marginal %>% mutate(hit_type = fct_relevel(factor(hit_type), c("Single", "Double", "Triple", "Home Run")))
 
 ggplot(filter(awards_hit_type_marginal, awardID == 'Outstanding DH Award' | awardID == 'Cy Young Award' | awardID == 'Most Valuable Player'), aes(x = awardID, y = percentage, fill = hit_type)) +
   geom_bar(stat = 'identity') +
