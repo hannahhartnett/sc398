@@ -12,8 +12,7 @@ author:
 affiliation:
   - address: Statistical Graphics, Colby College
 column_numbers: 4
-logoright_name: https&#58;//raw.githubusercontent.com/brentthorne/posterdown/master/images/betterhexlogo.png
-logoleft_name: https&#58;//raw.githubusercontent.com/brentthorne/posterdown/master/images/betterhexlogo.png
+primary_colour: '#8B0000'
 output: 
   posterdown::posterdown_html:
     self_contained: false
@@ -76,7 +75,7 @@ The Major League Baseball association has served as America's pastime's highest 
 Lahman's Baseball Database is part of the Comprehensive R  Archive Network. The updated version of the database contains complete batting and pitching statistics from 1871 to 2020, plus fielding statistics, standings, team stats, managerial records, post-season data, and more.
 
 # Looking at Continuous Hit Data
-
+<div style="margin-bottom:100px;">
 ```{r, warning = FALSE, message  = FALSE, echo = FALSE, fig.height = 6, out.width='100%', fig.align = "center"}
 
 # Hannah plot 1
@@ -119,7 +118,7 @@ ggplot(data = lo_tri_reordered, aes(x = Var1, y = Var2, fill = value)) +
   baseball_theme +
   theme(axis.text.x = element_text(angle = 45), text = element_text(size=13)) +
   scale_fill_gradient2(
-  low = "indianred1",
+  low = "#8B0000",
   mid = "white",
   high = "navy",
   midpoint = 0,
@@ -128,6 +127,10 @@ ggplot(data = lo_tri_reordered, aes(x = Var1, y = Var2, fill = value)) +
 ```
 
 We began with a high-level analysis of correlations between variables. Unsurprisingly, the number of games, hits, at bats, runs, and runs batted in are very highly positively correlated. There are no negatively correlated pairs of variables, though sacrifice hits have essentially no association with either home runs or intentional walks.
+
+
+
+</div>
 
 # Exploring HRs per AB
 
@@ -388,7 +391,7 @@ ggplot(filter(awards_hit_type_marginal, awardID == 'Outstanding DH Award' | awar
        fill = 'Hit Type',
        title = 'Number of Singles Hit Varies by Award Type') +
   baseball_theme +
-  scale_fill_manual(values = c('navy', 'indianred1', 'palegreen4', 'mediumpurple3'))
+  scale_fill_manual(values = c('navy', '#8B0000', 'palegreen4', 'mediumpurple3'))
 ```
 
 Unsurprisingly, the players who have received awards specific to hitting, like Outstanding Designated Hitter, have much higher home run totals and fewer singles than nonspecific awards, like MVP. Those players who have received awards unrelated to hitting, like the Cy Young Award for pitching, have the fewest collective home runs and the most singles. 
@@ -398,3 +401,6 @@ Unsurprisingly, the players who have received awards specific to hitting, like O
 Lahman's Baseball Database 
 
 http://www.seanlahman.com/baseball-archive/statistics/
+
+
+Stephen Jay Gould. Full House: The Spread Of Excellence From Plato To Darwin (New York: Harmony Books, 1996).
