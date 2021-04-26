@@ -136,6 +136,8 @@ density <- ggplot(by_year, aes(x = hr_ab))+
 density
 ```
 
+HR/AB by year has a two peaked distribution, with the first at around 0.05 representing the high concentration of low HR/AB numbers in the early years and the second at around 0.025 representing a concentration of higher HR/AB seasons. There is a decent right skew representing the rapid increase in HR/AB in recent years.
+
 # What influences number of home runs hit?
 
 ```{r, warning = FALSE, message  = FALSE, echo = FALSE, fig.height = 4, out.width='100%', fig.align = "center"}
