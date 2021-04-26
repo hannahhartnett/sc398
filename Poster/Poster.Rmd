@@ -68,7 +68,7 @@ baseball_theme <-  theme_gray() + # White background, black and white theme
 
 # Introduction
 
-
+Baseball is a very old sport, and the Major League Baseball association in the U.S. has been around for almost 120 years. We decided to dive into the in-depth historical database that chronicles the sport in order to examine how it has changed over time.
 
 # The Database
 
@@ -116,7 +116,7 @@ ggplot(data = lo_tri_reordered, aes(x = Var1, y = Var2, fill = value)) +
        title = 'Correlation Heat Map for Continuous Batting Variables',
        fill = 'Correlation') +
   baseball_theme +
-  theme(axis.text.x = element_text(angle = 45)) +
+  theme(axis.text.x = element_text(angle = 45), text = element_text(size=13)) +
   scale_fill_gradient2(
   low = "indianred1",
   mid = "white",
@@ -163,7 +163,8 @@ hitsperyear <- ggplot(bat_long, aes(x=yearID, y= value, col=variable)) +
   guides(colour=guide_legend(reverse=TRUE,
                              aes(ggtitle= "Type of Hit"))) +
   baseball_theme +
-  scale_colour_manual(values = c('navy', 'indianred1', 'palegreen4', 'mediumpurple3'))
+  scale_colour_manual(values = c('navy', 'indianred1', 'palegreen4', 'mediumpurple3')) +
+  theme(text = element_text(size=15))
 
 
 hitsperyear
@@ -195,13 +196,16 @@ sd_avg <-  ggplot(SD.data, aes(yearID, SD.AVG)) + geom_point() +
   geom_smooth(colour = 'navy', se=FALSE, span=0.35) +
   labs(title = "Standard Deviations of AVG of Regular Hitters",
        x = "Year", y = "SD of Batting Average") +
-  baseball_theme
+  baseball_theme +
+  theme(text = element_text(size=15))
+  
 
 sd_obp <- ggplot(SD.data, aes(yearID, SD.OBP)) +
   geom_point() + geom_smooth(colour = 'navy', se=FALSE, span=0.35) +
   labs(title = "Standard Deviations of OBP of Regular Hitters",
        x = "Year", y = "SD of On Base Percentage") +
-  baseball_theme
+  baseball_theme +
+  theme(text = element_text(size=15))
 grid.arrange(sd_avg, sd_obp, ncol = 1)
 ```
 
