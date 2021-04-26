@@ -210,6 +210,7 @@ Similarly, we see an increase in homeruns and doubles hit over time, correspondi
 
 ```{r, warning = FALSE, message  = FALSE, echo = FALSE, fig.height = 6, out.width='100%', fig.align = "center"}
 # Cole Plot 2
+library(ggseas)
 
 S <- summarize(group_by(Batting, yearID, playerID),
                H=sum(H), AB=sum(AB),
@@ -227,7 +228,7 @@ SD.data <- summarize(group_by(S.regular, yearID),
                      SD.OBP = sd((H + BB + HBP) / (AB + BB + HBP + SF)))
 
 sd_avg <-  ggplot(SD.data, aes(yearID, SD.AVG)) + geom_point(colour = 'navy') +
-  geom_smooth(colour = 'navy', se=FALSE, span=0.35) +
+  stat_rollapplyr(width = 10, align = "right", size = 1, color = "red") +
   labs(title = "Standard Deviations of AVG of Regular Hitters",
        x = "Year", y = "SD of Batting Average") +
   baseball_theme +
@@ -235,7 +236,8 @@ sd_avg <-  ggplot(SD.data, aes(yearID, SD.AVG)) + geom_point(colour = 'navy') +
   
 
 sd_obp <- ggplot(SD.data, aes(yearID, SD.OBP)) +
-  geom_point(colour = 'navy') + geom_smooth(colour = 'navy', se=FALSE, span=0.35) +
+  geom_point(colour = 'navy') + 
+  stat_rollapplyr(width = 10, align = "right", size = 1, color = "red") +
   labs(title = "Standard Deviations of OBP of Regular Hitters",
        x = "Year", y = "SD of On Base Percentage") +
   baseball_theme +
@@ -302,7 +304,7 @@ statperyear <- ggplot(advStatYear, aes(x = yearID, y = value)) +
 statperyear + baseball_theme
 ```
 
-# 
+
 
 ```{r, warning = FALSE, message  = FALSE, echo = FALSE, fig.height = 4, out.width='100%', fig.align = "center"}
 mvp2 <- mutate( mvp,
