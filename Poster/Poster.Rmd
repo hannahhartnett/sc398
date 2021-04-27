@@ -161,7 +161,7 @@ years <- ggplot()+
   geom_line(data = by_year, aes(x = yearID, y = hr_ab, color = "blue")) +
   geom_line(data = by_year, aes(x = yearID, y = k_ab, color = "red")) +
   scale_colour_manual(name = 'Metric',
-                      values =c('blue'='navy','red'='indianred1'), labels = c('HR/AB','K/AB'))+
+                      values =c('blue'='navy','red'='#8B0000'), labels = c('HR/AB','K/AB'))+
   labs(x = "Year", y = "Metric/AB", title = "HR/AB and K/AB by Year")
 years + baseball_theme
 ```
@@ -217,7 +217,7 @@ hitsperyear <- ggplot(bat_long, aes(x=yearID, y= value, col=variable)) +
   guides(colour=guide_legend(reverse=FALSE,
                              aes(ggtitle= "Type of Hit"))) +
   baseball_theme +
-  scale_colour_manual(values = c('navy', 'indianred1', 'palegreen4', 'mediumpurple3')) +
+  scale_colour_manual(values = c('navy', '#8B0000', 'palegreen4', 'mediumpurple3')) +
   theme(text = element_text(size=15))
 
 
@@ -251,7 +251,7 @@ SD.data <- summarize(group_by(S.regular, yearID),
                      SD.OBP = sd((H + BB + HBP) / (AB + BB + HBP + SF)))
 
 sd_avg <-  ggplot(SD.data, aes(yearID, SD.AVG)) + geom_point(colour = 'navy') +
-  stat_rollapplyr(width = 10, align = "right", size = 1, color = "red") +
+  stat_rollapplyr(width = 10, align = "right", size = 1, color = "#8B0000") +
   labs(title = "Standard Deviations of AVG of Regular Hitters",
        x = "Year", y = "SD of Batting Average") +
   baseball_theme +
@@ -260,7 +260,7 @@ sd_avg <-  ggplot(SD.data, aes(yearID, SD.AVG)) + geom_point(colour = 'navy') +
 
 sd_obp <- ggplot(SD.data, aes(yearID, SD.OBP)) +
   geom_point(colour = 'navy') + 
-  stat_rollapplyr(width = 10, align = "right", size = 1, color = "red") +
+  stat_rollapplyr(width = 10, align = "right", size = 1, color = "#8B0000") +
   labs(title = "Standard Deviations of OBP of Regular Hitters",
        x = "Year", y = "SD of On Base Percentage") +
   baseball_theme +
