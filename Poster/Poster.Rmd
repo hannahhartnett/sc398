@@ -13,9 +13,9 @@ affiliation:
   - address: Statistical Graphics, Colby College
 column_numbers: 4
 primary_colour: '#8B0000'
-titlebox_border_width: '2cm'
-poster_height: '48in'
-poster_width: '36in'
+titlebox_border_width: '8in'
+# poster_height: '48in'
+# oster_width: '36in'
 output: 
   posterdown::posterdown_html:
     self_contained: false
