@@ -150,7 +150,7 @@ density <- ggplot(by_year, aes(x = hr_ab))+
 density
 ```
 
-The distribution of HR/AB by year has a two peaked distribution, with the first at around 0.05 representing the high concentration of low HR/AB numbers in the early years and the second at around 0.025 representing a concentration of higher HR/AB seasons. There is a decent right skew representing the rapid increase in HR/AB in recent years.
+The distribution of HR/AB by year has a two peaked distribution, with the first at around 0.05-- a high concentration of low HR/AB numbers and the second at around 0.025 representing a concentration of higher HR/AB values. There is a decent right skew representing the few players with higher HR/AB numbers.
 
 <br>
 
