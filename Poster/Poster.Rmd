@@ -144,7 +144,7 @@ We began with a high-level analysis of correlations between variables. Unsurpris
 
 ```{r, warning = FALSE, message  = FALSE, echo = FALSE, fig.height = 4, out.width='100%', fig.align = "center"}
 density <- ggplot(by_year, aes(x = hr_ab))+
-  geom_density()+
+  geom_density(color = "navy",fill = "navy",alpha = 0.25,size = 2)+
   labs(x = "HR/AB", y = "Density of HR/AB by Year", title = "Density distribution of HR/AB from 1871-2020") + baseball_theme
 
 density
