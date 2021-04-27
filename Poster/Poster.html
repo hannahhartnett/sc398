@@ -46,11 +46,12 @@ height: 38in;
 padding: 0cm;
 }
 .title_container {
-width: 45in;
-height: calc(38in * 0.15);
+width: 100%;
+height: 15%;
 overflow: hidden;
 background-color: #8B0000;
-border: 0 solid #0b4545;
+border: 0 solid #8B0000
+;
 }
 .logo_left {
 float: left;
@@ -86,24 +87,28 @@ font-family: Palatino;
 }
 /* unvisited link */
 a:link {
-color: #cc0000;
+color: #008080;
+text-decoration: none;
 }
 .mybreak {
   break-before: column;
 }
 /* visited link */
 a:visited {
-color: #cc0000;
+color: #008080;
+text-decoration: none;
 }
 
 /* mouse over link */
 a:hover {
-color: #cc0000;
+color: #008080;
+text-decoration: none;
 }
 
 /* selected link */
 a:active {
-color: #cc0000;
+color: #008080;
+text-decoration: none;
 }
 .poster_body {
 -webkit-column-count: 4; /* Chrome, Safari, Opera */
@@ -135,9 +140,9 @@ border: 0;
 font-weight: normal;
 }
 .poster_body_wrap{
-width: calc(45in + 0 + 0);
-height: calc(38in * 0.83);
-padding-top: calc(38in * 0.005);
+width: 45in;
+height: calc(100% - 17%);
+padding-top: calc(38in * 0.01);
 padding-bottom: calc(38in * 0.01);
 background-color: #ffffff;
 }
@@ -160,7 +165,7 @@ border: 0;
 font-weight: normal;
 }
 img {
-margin-top: 2cm;
+margin-top: 0;
 margin-bottom: 0;
 }
 .section {
@@ -198,25 +203,41 @@ margin-bottom: 2cm;
 position: sticky;
 width: 100%;
 }
-pre.sourceCode.r {
-background-color: #dddddd40;
-border-radius: 4mm;
+pre.sourceCode.r, pre.sourceCode.python {
+background-color: #ffffff20;
+border: solid #008080 1mm;
+border-radius: 0.5em;
 padding: 4mm;
-width: 75%;
-/* align-items: center; */
 margin: auto;
-padding-left: 2cm;
+margin-top: 1em;
+margin-bottom: 1em;
+/* align-items: center; */
 }
-code.sourceCode.r{
+div.sourceCode {
+background-color: transparent;
+width: 85%;
+margin-left: auto;
+margin-right: auto;
+}
+code.sourceCode.r, code.sourceCode.python {
 background-color: transparent;
 font-size: 20pt;
 border-radius: 2mm;
 }
-.caption {
+code {
 font-size: 25pt;
+font-family: monospace;
+background-color: #00808024;
+color: #008080;
+padding: 1.2mm;
+line-height: 1;
+border-radius: 2mm;
+}
+.caption {
+font-size: 20pt;
 }
 .table caption {
-font-size: 25pt;
+font-size: 20pt;
 padding-bottom: 3mm;
 
 }
@@ -254,6 +275,7 @@ margin-right: 4mm;
 margin-left: 4mm;
 margin-top: 6mm;
 margin-bottom: 10mm;
+color: #000000
 }
 .poster_body ol {
 margin-right: 4mm;
@@ -283,7 +305,7 @@ font-size: 20pt;
 <div class= "poster_title">
 <h1 id="title"><div class="line-block">How Has Major League Baseball Changed Over Time?<br />
 Exploring the Lahman’s Baseball Database</div></h1>
-<h3 id="author">Frank Driscoll<sup></sup>, Cam Garfield<sup></sup>, Cole Guerin<sup></sup>, Hannah Hartnett<sup></sup></h3><br>
+<h3 id="author">Frank Driscoll<sup></sup>, Cam Garfield<sup></sup>, Cole Guerin<sup></sup>, Hannah Hartnett<sup></sup></h3>
 <h5 id="affiliation"><sup></sup> Statistical Graphics, Colby College</h5>
 </div>
 <!-- Right Logo  -->
