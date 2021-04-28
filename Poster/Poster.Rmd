@@ -396,11 +396,9 @@ statperyear <- ggplot(advStatYear, aes(x = yearID, y = value)) +
   theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust=1)) +
   facet_wrap(. ~ variable, ncol = 2)
 
-statperyear + baseball_theme +
-  theme(text = element_text(size=15))
+statperyear + baseball_theme
 ```
 
-<br>
 
 ```{r, warning = FALSE, message  = FALSE, echo = FALSE, fig.height = 4, out.width='100%', fig.align = "center"}
 
