@@ -429,7 +429,7 @@ plotA + coord_polar(theta = 'x') +
   scale_fill_manual(values = c('indianred1', 'indianred2', 'indianred3', 'indianred4', 'palegreen1', 'palegreen2', 'palegreen3', 'palegreen4', 'medium purple1', 'medium purple2', 'medium purple3', 'goldenrod', 'goldenrod1', 'mediumblue', 'navy')) +
   theme(text = element_text(size=12))
 ```
-Throughout the years baseballs advanced statistics such as batting average on balls in play (BABIP), on-base percentage (OBP) and slugging percentage (SlugPct), a measure of total bases gained by a batter per at bat, and more have become increasingly important in understanding a player's contribution and value to the game. As such, these players and outcomes have become more highly valued within the game.
+Throughout the years, baseball's advanced statistics, including batting average on balls in play (BABIP), on-base percentage (OBP) and slugging percentage (SlugPct), a measure of total bases gained by a batter per at bat, have become increasingly important in understanding a player's contribution and value to the game. As such, these players and outcomes have become more highly valued within the game.
 
 <br>
 
