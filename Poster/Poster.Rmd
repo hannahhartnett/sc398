@@ -1,5 +1,5 @@
 ---
-  title: |
+title: |
   | How Has Major League Baseball Changed Over Time?
   | Exploring the Lahman's Baseball Database
 author:
@@ -14,15 +14,15 @@ affiliation:
 column_numbers: 4
 primary_colour: '#8B0000'
 titlebox_border_width: '8in'
-# poster_height: '48in'
-# oster_width: '36in'
+sectitle_textsize: '38pt'
+body_textsize: '40px'
 output:
   posterdown::posterdown_html:
   self_contained: false
 bibliography: packages.bib
 ---
 
-  ```{r setup, include=FALSE}
+```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = FALSE)
 library(Lahman)
 library(dplyr)
@@ -75,7 +75,7 @@ The Major League Baseball association has served as America's pastime's highest 
 
 <br>
 
-  # The Database
+# The Database
 
   Lahman's Baseball Database is part of the Comprehensive R  Archive Network. The updated version of the database contains complete batting and pitching statistics from 1871 to 2020, plus fielding statistics, standings, team stats, managerial records, post-season data, and more.
 
@@ -138,24 +138,34 @@ We began with a high-level analysis of correlations between variables. Unsurpris
 <br>
 <br>
 <br>
-
-
-
-</div>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
 
 # Exploring HRs per AB
 
 ```{r, warning = FALSE, message  = FALSE, echo = FALSE, fig.height = 4, out.width='100%', fig.align = "center"}
 density <- ggplot(by_year, aes(x = hr_ab))+
   geom_density(color = "navy",fill = "navy",alpha = 0.25,size = 2)+
-  labs(x = "HR/AB", y = "Density of HR/AB by Year", title = "Density distribution of HR/AB from 1871-2020") + baseball_theme
+  labs(x = "HR/AB", y = "Density of HR/AB by Year", title = "Density distribution of HR/AB from 1871-2020") + baseball_theme  +
+  theme(text = element_text(size=15))
 
 density
 ```
 
 The distribution of HR/AB by year has a two peaked distribution, with the first at around 0.05-- a high concentration of low HR/AB numbers and the second at around 0.025 representing a concentration of higher HR/AB values. There is a decent right skew representing the few players with higher HR/AB numbers.
 
-<br>
+
 
 # What influences number of home runs hit?
 
@@ -166,26 +176,18 @@ years <- ggplot()+
   scale_colour_manual(name = 'Metric',
                       values =c('blue'='navy','red'='#8B0000'), labels = c('HR/AB','K/AB'))+
 labs(x = "Year", y = "Metric/AB", title = "HR/AB and K/AB by Year")
-years + baseball_theme
+years + baseball_theme +
+  theme(text = element_text(size=15))
 ```
 
 Over the years, both home runs and strikeouts have increased, indicating a transition from small ball baseball
 where pitchers throw to contact, to high power baseball where stronger hitters try to hit home runs and pitchers
 with increased velocity go for strikeouts.
 
-<br>
-  <br>
-  <br>
-  <br>
-  <br>
-  <br>
-  <br>
-  <br>
-  <br>
 
-  # Exploring Hit Type
+# Exploring Hit Type
 
-  ```{r, warning = FALSE, message  = FALSE, echo = FALSE, fig.height = 4, out.width='100%', fig.align = "center"}
+```{r, warning = FALSE, message  = FALSE, echo = FALSE, fig.height = 4, out.width='100%', fig.align = "center"}
 # Cole Plot 1
 
 batting <- Batting %>%
@@ -229,12 +231,9 @@ hitsperyear
 
 Similarly, we see an increase in homeruns and doubles hit over time, corresponding with a decrease in singles and triples. There is a particularly large increase in home runs and decrease in singles in the last ten years.
 
+# Batting Average getting Lower?
 
-<br>
-
-  # Batting Average getting Lower?
-
-  ```{r, warning = FALSE, message  = FALSE, echo = FALSE, fig.height = 6, out.width='100%', fig.align = "center"}
+```{r, warning = FALSE, message  = FALSE, echo = FALSE, fig.height = 6, out.width='100%', fig.align = "center"}
 # Cole Plot 2
 library(ggseas)
 
@@ -272,96 +271,9 @@ grid.arrange(sd_avg, sd_obp, ncol = 1)
 ```
 
 
-A recent study theorized that the disappearance of the 0.400 batting average in baseball is caused by the steady decrease of batting averages among “regular” players overtime, perhaps related to the earlier claim of pitchers with high velocity attempting more strikeouts. The great hitters are moving closer to the average because of this smaller variation, so fewer athletes have been able to reach the 0.400 batting average mark. In the top plot, we see that the standard deviation of batting average for so called “regular” players has decreased over time, but it has been very consistent in the last 60 years. We also see a drop in the standard deviation of on-base percentage, shown in the bottom plot.
-
-
-
-# Hitting Statistics Rising
-
-```{r, warning = FALSE, message  = FALSE, echo = FALSE, fig.height = 4, out.width='100%', fig.align = "center"}
-
-# datasets for mvp and allstar awards just in case we want to use
-data(AwardsPlayers)
-mvp <- subset(AwardsPlayers, awardID == "Most Valuable Player")
-allstar <- AllstarFull
-
-# adding adv stats to datasets
-bstats <- battingStats()
-mvp <- merge(mvp, bstats, by = c("playerID", "yearID"))
-allstar <- merge(allstar, bstats, by = c("playerID", "yearID"))
-
-# mirroring the process we have performed earlier to create single, double, etc. categories for hitting dataset
-Bstats <- bstats %>%
-  # select the variables that we want left after we filter the data
-  select(yearID, H, X2B, X3B, HR, RBI, BA, SlugPct, OBP, OPS, BABIP) %>%
-  # select the years from 1871+
-  filter(yearID >= 1871) %>%
-  group_by(yearID) %>%
-  #  summarise_each(funs(sum(., na.rm=TRUE))) %>%
-  summarise_all(funs(sum(., na.rm=TRUE))) %>%
-  # we summarize by year, and then na.rm takes care of 0's in the data
-  mutate(X1 = H-(X2B+X3B+HR)) %>% #create a column for singles
-  # we eventually want these as a percentage of hits, so we can do the math now
-  mutate(Single = X1/H*100) %>%
-  mutate(Double = X2B/H*100) %>%
-  mutate(Triple = X3B/H*100) %>%
-  mutate(HomeRun = HR/H*100)
-
-# selecting only adv statistics from batting statistics
-advStat <- Bstats %>%
-  select(yearID, BABIP, OBP, SlugPct)
-advStatYear <- melt(advStat, id.vars = c("yearID"))
-# removed ops because that is a measure of obp and slugpct combined, also messed with the scale of the graphs
-
-# create histograms for yearly totals of adv stats
-statperyear <- ggplot(advStatYear, aes(x = yearID, y = value)) +
-  geom_histogram(stat = "identity", color = "navy", alpha = 0.7) +
-  geom_smooth(method = loess, se = F ,color = "red") +
-  xlab("Arranged by Major League Baseball Season") +
-  ylab("Cumulative Values") +
-  ggtitle("Cumulative Advanced Hitting Statistics Rising Over Time in the MLB by year") +
-  scale_x_continuous(breaks = c(1870, 1900,  1930,
-                                1960, 1990,  2020 )) +
-  guides(colour=guide_legend(reverse=TRUE,
-                             aes(ggtitle= "Stat Type"))) +
-  theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust=1)) +
-  facet_wrap(. ~ variable, ncol = 2)
-
-statperyear + baseball_theme
-```
+A recent study theorized that the disappearance of the 0.400 batting average in baseball is caused by the steady decrease of batting averages among “regular” players overtime, perhaps related to the earlier claim of pitchers with high velocity attempting more strikeouts. Great hitters are moving closer to the average because of this smaller variation, so less baseball athletes have been able to reach the 0.400 batting average mark. From the top plot, we can see that the standard deviation of batting average for so called “regular” players has decreased over time, but it has been very consistent in the last 60 years. A different batting statistic, that has seen more of a drop recently, is the standard deviation for on base percentage which is shown in bottom plot.
 
 <br>
-
-  ```{r, warning = FALSE, message  = FALSE, echo = FALSE, fig.height = 4, out.width='100%', fig.align = "center"}
-
-# creating datasets categorized by decade long data
-mvp2 <- mutate( mvp,
-                yearID = cut(yearID, c(1890, 1900, 1910, 1920, 1930, 1940, 1950, 1960, 1970, 1980, 1990, 2000, 2010, 2020, Inf),
-                             labels = c("1890s", "1900s", "1910s", "1920s", "1930s", "1940s", "1950s", "1960s", "1970s", "1980s", "1990s", "2000s", "2010s", "2020") ))
-
-advStat2 <- mutate(advStat,
-                   yearID = cut(yearID, c(1870, 1880, 1890, 1900, 1910, 1920, 1930, 1940, 1950, 1960, 1970, 1980, 1990, 2000, 2010, Inf),
-                                labels = c("1870s", "1880s","1890s", "1900s", "1910s", "1920s", "1930s", "1940s", "1950s", "1960s", "1970s", "1980s", "1990s", "2000s", "2010s") ))
-
-advStatYear2 <- melt(advStat2, id.vars = c("yearID"))
-
-
-
-# creating bar graph for adv stats over decade long periods (15 decades in total)
-plotA <- ggplot(advStatYear2, aes(x = yearID, y = value, fill = yearID)) +
-  geom_bar(stat = "identity") +
-  facet_wrap(. ~ variable, nrow = 1)
-
-plotA + coord_polar(theta = 'x') +
-  baseball_theme +
-  labs(title = "Advanced Statistics Growing each Decade", x = "Sorted by specific advanced statistics", y = "Corresponding Cumulative Values") +
-  theme(axis.text.x = element_text(size = 5),  axis.ticks = element_blank(), axis.text.y = element_blank(), legend.position = "none") +
-  scale_fill_manual(values = c('indianred1', 'indianred2', 'indianred3', 'indianred4', 'palegreen1', 'palegreen2', 'palegreen3', 'palegreen4', 'medium purple1', 'medium purple2', 'medium purple3', 'goldenrod', 'goldenrod1', 'mediumblue', 'navy'))
-```
-Throughout the years baseballs advanced statistics such as batting average on balls in play (BABIP), on-base percentage (OBP) and slugging percentage (SlugPct), a measure of total bases gained by a batter per at bat, and more have become increasingly important in understanding a player's contribution and value to the game. As such, these players and outcomes have become more highly valued within the game.
-
-<br>
-
 
 # Awards and Hitting Relationship
 
@@ -424,17 +336,107 @@ ggplot(filter(awards_hit_type_marginal, awardID == 'Outstanding DH Award' | awar
        fill = 'Hit Type',
        title = 'Number of Singles Hit Varies by Award Type') +
   baseball_theme +
-  scale_fill_manual(values = c('navy', '#8B0000', 'palegreen4', 'mediumpurple3'))
+  scale_fill_manual(values = c('navy', '#8B0000', 'palegreen4', 'mediumpurple3')) +
+  theme(text = element_text(size=15))
 ```
 
 Unsurprisingly, the players who have received awards specific to hitting, like Outstanding Designated Hitter, have much higher home run totals and fewer singles than nonspecific awards, like MVP. Those players who have received awards unrelated to hitting, like the Cy Young Award for pitching, have the fewest collective home runs and the most singles.
 
+<br>
+<br>
+
+# Hitting Statistics Rising
+
+```{r, warning = FALSE, message  = FALSE, echo = FALSE, fig.height = 4, out.width='100%', fig.align = "center"}
+
+# datasets for mvp and allstar awards just in case we want to use
+data(AwardsPlayers)
+mvp <- subset(AwardsPlayers, awardID == "Most Valuable Player")
+allstar <- AllstarFull
+
+# adding adv stats to datasets
+bstats <- battingStats()
+mvp <- merge(mvp, bstats, by = c("playerID", "yearID"))
+allstar <- merge(allstar, bstats, by = c("playerID", "yearID"))
+
+# mirroring the process we have performed earlier to create single, double, etc. categories for hitting dataset
+Bstats <- bstats %>%
+  # select the variables that we want left after we filter the data
+  select(yearID, H, X2B, X3B, HR, RBI, BA, SlugPct, OBP, OPS, BABIP) %>%
+  # select the years from 1871+
+  filter(yearID >= 1871) %>%
+  group_by(yearID) %>%
+  #  summarise_each(funs(sum(., na.rm=TRUE))) %>%
+  summarise_all(funs(sum(., na.rm=TRUE))) %>%
+  # we summarize by year, and then na.rm takes care of 0's in the data
+  mutate(X1 = H-(X2B+X3B+HR)) %>% #create a column for singles
+  # we eventually want these as a percentage of hits, so we can do the math now
+  mutate(Single = X1/H*100) %>%
+  mutate(Double = X2B/H*100) %>%
+  mutate(Triple = X3B/H*100) %>%
+  mutate(HomeRun = HR/H*100)
+
+# selecting only adv statistics from batting statistics
+advStat <- Bstats %>%
+  select(yearID, BABIP, OBP, SlugPct)
+advStatYear <- melt(advStat, id.vars = c("yearID"))
+# removed ops because that is a measure of obp and slugpct combined, also messed with the scale of the graphs
+
+# create histograms for yearly totals of adv stats
+statperyear <- ggplot(advStatYear, aes(x = yearID, y = value)) +
+  geom_histogram(stat = "identity", color = "navy", alpha = 0.7) +
+  geom_smooth(method = loess, se = F ,color = "red") +
+  xlab("Arranged by Major League Baseball Season") +
+  ylab("Cumulative Values") +
+  ggtitle("Cumulative Advanced Hitting Statistics Rising Over Time in the MLB by year") +
+  scale_x_continuous(breaks = c(1870, 1900,  1930,
+                                1960, 1990,  2020 )) +
+  guides(colour=guide_legend(reverse=TRUE,
+                             aes(ggtitle= "Stat Type"))) +
+  theme(axis.text.x = element_text(angle = 45, vjust = 1, hjust=1)) +
+  facet_wrap(. ~ variable, ncol = 2)
+
+statperyear + baseball_theme +
+  theme(text = element_text(size=15))
+```
 
 <br>
 
-  # Sources
+```{r, warning = FALSE, message  = FALSE, echo = FALSE, fig.height = 4, out.width='100%', fig.align = "center"}
 
-  Lahman's Baseball Database
+# creating datasets categorized by decade long data
+mvp2 <- mutate( mvp,
+                yearID = cut(yearID, c(1890, 1900, 1910, 1920, 1930, 1940, 1950, 1960, 1970, 1980, 1990, 2000, 2010, 2020, Inf),
+                             labels = c("1890s", "1900s", "1910s", "1920s", "1930s", "1940s", "1950s", "1960s", "1970s", "1980s", "1990s", "2000s", "2010s", "2020") ))
+
+advStat2 <- mutate(advStat,
+                   yearID = cut(yearID, c(1870, 1880, 1890, 1900, 1910, 1920, 1930, 1940, 1950, 1960, 1970, 1980, 1990, 2000, 2010, Inf),
+                                labels = c("1870s", "1880s","1890s", "1900s", "1910s", "1920s", "1930s", "1940s", "1950s", "1960s", "1970s", "1980s", "1990s", "2000s", "2010s") ))
+
+advStatYear2 <- melt(advStat2, id.vars = c("yearID"))
+
+
+
+# creating bar graph for adv stats over decade long periods (15 decades in total)
+plotA <- ggplot(advStatYear2, aes(x = yearID, y = value, fill = yearID)) +
+  geom_bar(stat = "identity") +
+  facet_wrap(. ~ variable, nrow = 1)
+
+plotA + coord_polar(theta = 'x') +
+  baseball_theme +
+  labs(title = "Advanced Statistics Growing each Decade", x = "Sorted by specific advanced statistics", y = "Corresponding Cumulative Values") +
+  theme(axis.text.x = element_text(size = 5),  axis.ticks = element_blank(), axis.text.y = element_blank(), legend.position = "none") +
+  scale_fill_manual(values = c('indianred1', 'indianred2', 'indianred3', 'indianred4', 'palegreen1', 'palegreen2', 'palegreen3', 'palegreen4', 'medium purple1', 'medium purple2', 'medium purple3', 'goldenrod', 'goldenrod1', 'mediumblue', 'navy')) +
+  theme(text = element_text(size=12))
+```
+Throughout the years baseballs advanced statistics such as batting average on balls in play (BABIP), on-base percentage (OBP) and slugging percentage (SlugPct), a measure of total bases gained by a batter per at bat, and more have become increasingly important in understanding a player's contribution and value to the game. As such, these players and outcomes have become more highly valued within the game.
+
+<br>
+
+
+# Sources
+
+Lahman's Baseball Database
 
 http://www.seanlahman.com/baseball-archive/statistics/
 
