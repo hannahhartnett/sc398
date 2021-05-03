@@ -1,6 +1,6 @@
 ---
 title: "SC398 Homework 10"
-author: "[Names and Colby IDs of all members of your Group]"
+author: Frank Driscoll, Cam Garfield, Cole Guerin, Hannah Hartnett
 date: "Due Thursday, May 6, 2021 on Moodle"
 output: 
   html_document:
