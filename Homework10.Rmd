@@ -236,7 +236,7 @@ Answer: When you hover over a point, Plotly displays the eruption and waiting ti
 * *Also facet the graph by `week`. Try to click & drag **only vertically**, to zoom in on a horizontal slice within one facet. What happens to the other facet? How about if you click & drag **only horizontally**?* 
 *(Eventually, these two kinds of zoom should have the same effect, but apparently it is still an open issue in Plotly's development.)*
 
-Answer: When you click and drag vertically, Plotly has the pltos for both facets zoom in, but when you click and drag horizontally, Plotly only has the plot for the facet you clicked on zoom in.
+Answer: When you click and drag vertically, Plotly has the plots for both facets zoom in, but when you click and drag horizontally, Plotly only has the plot for the facet you clicked on zoom in.
 
 ```{r plotly, echo=FALSE, warning=FALSE, message=FALSE}
 library(plotly)
