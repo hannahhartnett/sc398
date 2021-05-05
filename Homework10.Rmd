@@ -18,34 +18,19 @@ runtime: shiny
 
 # Problem 0
 
-(20 points)
-
 ## Project dataset and office hour
+Link to dataset: 
 
-
-**Assignment**:  Read the Interactive Graphics Group Project file on Moodle. Choose your dataset for the project (or your topic, if doing a simulation/explanation/etc instead of data analysis). Brainstorm at least three questions you'd like to answer with your dataset.
-
-*(Next week in lecture, we'll see that there are various kinds of interactive apps you could make: curated & personalized data exploration, sports analytics dashboards, journalistic reporting of a data analysis, "explorable explanations," etc.)*
-
-Finally, [sign your team up for a Wed 5/12 office hour](https://docs.google.com/spreadsheets/d/1305CI5Vx_7aVYRuwcoTQ0rGWp9sOeNrclXJSacEi-gg/edit?usp=sharing) to go over your draft app with Jerzy and get feedback, just as you did for the posters.
-
-**What you have to turn in**:  
-
-+  *A link to the dataset (or topic description, if not using a dataset)*
-
-Answer: https://acleddata.com/data-export-tool/
+https://acleddata.com/data-export-tool/
 
 https://raw.githubusercontent.com/hannahhartnett/sc398/main/US-ACLED.csv?token=APJP4N4Q2STICLA7OPLGY3DASLSQ4
 
-+  *A brief (no more than two paragraphs) description of the dataset, including number of rows, number of columns, explaining what each observation corresponds to, giving an overview of the columns/variables, etc.*
+Dataset Description: 
 
-Answer: 
   The ACLED dataset provides information about political violence and protests in various regions of the world; we have chosen the United States in the year 2020. The data are collected weekly from secondary sources such as news reports, and independently coded (using the same coding rubric) by three researchers. It is important to note that each record represents a different date, location, agent, and event, ie. if one protest lasts for three days in a specific location, it will be recorded as three different units in the dataset.  
   There are 23238 records in our dataset with 31 variables. The key variables include event date, type of event (peaceful protest, protest with intervention, violence against civilians, etc.), actors involved in the event, location of the event, news source used to code the event, number of fatalities, and notes taken about the event by the researchers. 
 
-+  *At least three ideas of questions you can answer with your dataset, and how you might answer them using interactive statistical graphics.  This may include specific ideas about the types of graphs and interactions you'll create, or simply sentences like "What is the relationship between the age of shark attack victims and the year in which the shark attack occurred?  Does this change depending on the gender of the victim?"*
-
-Answer: 
+Questions for dataset: 
 
 1. Did peaceful protests increase or decrease in the United States after the beginning of lockdown orders in March 2020?
 
@@ -54,38 +39,14 @@ Answer:
 3. How did the type and location of protests change over the course of the presidential election? Can we identify pro-Trump and pro-Biden protests?
 
 
-+ *Be sure you've signed up for a team office hour to get feedback on Wed 5/12*
+Signed up for office hours on: 
 
-Answer: Wednesday 5/12 at 1:45pm
+Wednesday 5/12 at 1:45pm
 
 
 ## Shiny tutorial
 
-**Assignment:** Ensure that every team member has read the 7-lesson Shiny tutorial [here](https://shiny.rstudio.com/tutorial/written-tutorial/lesson1/).
-
-Shiny does **not** work on Colby's RStudio server this semester. If you cannot or choose not to install `shiny` on your own computer, please work alongside a teammate who does have it on their own computer, and go through the 7-lesson tutorial together.
-
-**What you have to turn in**:  
-
-+ *A note confirming that you've all worked through the tutorial.*
-
 Answer: We've all read/worked through the tutorial.
-
-***
-***
-
-
-
-
-The remaining problems are practice working with Shiny and Plotly, first separately and then together.
-
-We will show a histogram and density plot for the Old Faithful dataset, and we will allow users to control the binwidth and bandwidth interactively. (This is based on the first example from RStudio's [Interactive Documents](https://rmarkdown.rstudio.com/authoring_shiny.html) page.)
-
-**This is NOT meant as a good example of an interaction for your final projects -- it's just a simple demo of how to work with Shiny code. In most final projects, you should choose such technical details as bandwidths in advance, not leave it up to your users. The users' interactions should be more about interpretation of the data. For example: what subset of they data do they want to explore? what different trends appear when you facet by different confounders? etc.**
-
-Read the Old Faithful documentation file using `?faithful` to see what its variables and observations are.
-
-As far as I can tell, the data were recorded in order across about 2 weeks. Just so that we can add a categorical variable to the dataset, let's assume that about half of the observations were taken during each week.
 
 ```{r}
 faithful$week <- rep(c("Week 1", "Week 2"), each = 136)
@@ -93,13 +54,7 @@ faithful$week <- rep(c("Week 1", "Week 2"), each = 136)
 
 # Problem 1: Shiny Outputs
 
-(20 points)
-
-We will practice running a Shiny app and converting base R graphs to `ggplot2` equivalents.
-
-You can embed Shiny inputs and outputs in your document. Outputs are automatically updated whenever inputs change.  This demonstrates how a standard R plot can be made interactive by wrapping it in the Shiny `renderPlot` function. The `selectInput` and `sliderInput` functions create the input widgets used to drive the plot.
-
-*a. (0 points)  Run the existing app by clicking the "Run Document" button in RStudio. Play with the two inputs (dropdown and slider). Can you find a combination of histogram binwidth and density bandwidth adjustment for which the histogram and density plot look similar?*
+a.
 
 ```{r base_r, echo=FALSE}
 shinyApp(
@@ -132,11 +87,7 @@ shinyApp(
 )
 ```
 
-*b. (20 points)  Modify the code below, so that the histogram and density plot are drawn using `ggplot2` instead of base R graphics. You only need to replace what's inside `renderPlot({...})`.*
-
-* *Make a single call to `ggplot()`, specifying the `faithful` dataset. Map the `eruptions` variable to the x aesthetic, and map `..density..` to the y-aesthetic so the histogram and density plots will have the same scale.*
-* *Add the two geoms. Use `input$n_breaks` and `input$bw_adjust` to specify the number of histogram bins and the density bandwidth adjustment.*
-* *Make sure you have an appropriate title, axis labels, and data-source caption.*
+b.
 
 ```{r ggplot, echo=FALSE, warning=FALSE, message=FALSE}
 library(ggplot2)
@@ -177,16 +128,7 @@ shinyApp(
 
 # Problem 2: Shiny Inputs
 
-(20 points)
-
-*We will continue to modify the example above. Now, add two more control "widgets" to allow extra inputs. The Shiny Tutorial's [Lesson 3](https://shiny.rstudio.com/tutorial/written-tutorial/lesson3/) has general advice about using widgets.*
-
-* *Add a `radioButtons()` widget which lets you choose whether the `eruptions` or `waiting` variable should be plotted. Use `aes_string()` instead of `aes()` in your plot to use this input for your graph. (**Hint:** See Lecture 22 examples.)*  
-*Also change the plot title depending on which variable is plotted. (**Hint:** Use `ifelse()` inside `labs()`.)*
-* *Also add a `checkboxInput()` widget which lets you toggle whether or not a rug plot is added. (**Hint:** Save the plot without rugs using `p2 <- ggplot(...) + ...`; then use an `if` statement to add a rug to `p2` only if the checkbox was selected; and finally put `p2` as its own line of code to display the final graph.)*
-
 ```{r more_inputs, echo=FALSE, warning=FALSE, message=FALSE}
-## COPY YOUR SOLUTION TO PROBLEM 1.B HERE, THEN MAKE THE REQUESTED CHANGES ##
 shinyApp(
   
   ui = fluidPage(
@@ -230,22 +172,16 @@ shinyApp(
 )
 ```
 
-
 ***
 ***
 
 # Problem 3: Plotly
 
-(20 points)
-
-*Plotly is a different way of making interactive plots. Most `ggplot` graphs can be saved and passed into the `ggplotly()` function to automatically get interactive zooming, panning, and tooltips on mouseover. Play with the plot below, then add these two extra features:*
-
-* *Overlay scatterplot points on the graph using `geom_point()`. What information does Plotly display when you hover the mouse over a point? How about when you hover over the density contours but not over a point?*
+*What information does Plotly display when you hover the mouse over a point? How about when you hover over the density contours but not over a point?*
 
 Answer: When you hover over a point, Plotly displays the eruption and waiting time corresponding to the point. When you hover over the density contours, Plotly displays the contour level.
 
-* *Also facet the graph by `week`. Try to click & drag **only vertically**, to zoom in on a horizontal slice within one facet. What happens to the other facet? How about if you click & drag **only horizontally**?* 
-*(Eventually, these two kinds of zoom should have the same effect, but apparently it is still an open issue in Plotly's development.)*
+*What happens to the other facet? How about if you click & drag only horizontally*
 
 Answer: When you click and drag vertically, Plotly has the plots for both facets zoom in, but when you click and drag horizontally, Plotly only has the plot for the facet you clicked on zoom in.
 
@@ -261,21 +197,10 @@ p3 <- ggplot(faithful, aes(x = eruptions, y = waiting)) +
 ggplotly(p3)
 ```
 
-
 ***
 ***
 
 # Problem 4: Plotly within Shiny
-
-(20 points)
-
-*Finally, repeat your Shiny app from Problem 2. However, this time, use Plotly to render the graph, so that you have the best of both worlds: Shiny's interaction around the plot (selecting variables, toggling options, etc.), **and** Plotly's interaction within the plot itself (zooming, mouseover, etc.).*
-
-*Simply copy the contents of your Problem 2 code block below, then make these changes:*
-
-* *`plotOutput()` should become `plotlyOutput()`*
-* *`renderPlot()` should become `renderPlotly()`*
-* *As in Problem 3, save the ggplot output as `p4 <- ggplot(...) + ...`, and then call it using `ggplotly(p4)`*
 
 ```{r plotly_in_shiny, echo=FALSE, warning=FALSE, message=FALSE}
 ## COPY YOUR SOLUTION TO PROBLEM 2 HERE, THEN MAKE THE REQUESTED CHANGES ##
