@@ -38,10 +38,19 @@ Answer: https://acleddata.com/data-export-tool/
 +  *A brief (no more than two paragraphs) description of the dataset, including number of rows, number of columns, explaining what each observation corresponds to, giving an overview of the columns/variables, etc.*
 
 Answer: 
+  The ACLED dataset provides information about political violence and protests in various regions of the world; we have chosen the United States. The data are collected weekly from secondary sources such as news reports, and independently coded (using the same coding rubric) by three researchers. It is important to note that each record represents a different date, location, agent, and event, ie. if one protest lasts for three days in a specific location, it will be recorded as three different units in the dataset.  
+  (there are x records in our dataset with y columns, including ...)
 
 +  *At least three ideas of questions you can answer with your dataset, and how you might answer them using interactive statistical graphics.  This may include specific ideas about the types of graphs and interactions you'll create, or simply sentences like "What is the relationship between the age of shark attack victims and the year in which the shark attack occurred?  Does this change depending on the gender of the victim?"*
 
 Answer: 
+
+1. Did peaceful protests increase or decrease in the United States after the beginning of lockdown orders in March 2020?
+
+2. Was there an increase in protests 'with intervention' in the United States after the murders of George Floyd, Ahmaud Arbery, Breonna Taylor, and other Black Americans in the spring of 2020? Where did these protests occur?
+
+3. How did the type and location of protests change over the course of the presidential election? Can we identify pro-Trump and pro-Biden protests?
+
 
 + *Be sure you've signed up for a team office hour to get feedback on Wed 5/12*
 
