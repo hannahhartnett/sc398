@@ -13,21 +13,6 @@ runtime: shiny
 #  Homework 10: Interaction with Shiny and Plotly
 
 
-***General instructions for all assignments***: 
-
-
-+ Use this file as the template for your submission. You can delete unnecessary text (e.g. these instructions, the problem statements, etc), but keep the nicely formatted "Problem 1", "Problem 2", "a.", "b.", etc.
-+ Upload a single `R` Markdown file **ONLY** (no knitted HTML file this week!) to the appropriate submission section on Moodle.  
-Name this file as: [ColbyID]-HomeworkXX.Rmd
-+ The instructor and TAs will run your .Rmd file on their computer. If your .Rmd file does not knit on our computers, you will be deducted 10 points.
-+ Your file should contain the code to answer each question in its own code block. Your code should produce plots/output that will be automatically embedded in the output.
-+ Each answer should be supported by written statements (unless otherwise specified).
-+ Include the name of anyone you collaborated with at the top of the assignment.
-+ Include the style guide you used in the assignment header along with your name and ColbyID.
-
-
-
-
 ***
 ***
 
@@ -60,7 +45,7 @@ Answer:
 
 + *Be sure you've signed up for a team office hour to get feedback on Wed 5/12*
 
-Answer: 
+Answer: Wednesday 5/12 at 1:45pm
 
 
 ## Shiny tutorial
