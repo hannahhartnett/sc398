@@ -35,11 +35,13 @@ Finally, [sign your team up for a Wed 5/12 office hour](https://docs.google.com/
 
 Answer: https://acleddata.com/data-export-tool/
 
+https://raw.githubusercontent.com/hannahhartnett/sc398/main/US-ACLED.csv?token=APJP4N4Q2STICLA7OPLGY3DASLSQ4
+
 +  *A brief (no more than two paragraphs) description of the dataset, including number of rows, number of columns, explaining what each observation corresponds to, giving an overview of the columns/variables, etc.*
 
 Answer: 
   The ACLED dataset provides information about political violence and protests in various regions of the world; we have chosen the United States. The data are collected weekly from secondary sources such as news reports, and independently coded (using the same coding rubric) by three researchers. It is important to note that each record represents a different date, location, agent, and event, ie. if one protest lasts for three days in a specific location, it will be recorded as three different units in the dataset.  
-  (there are x records in our dataset with y columns, including ...)
+  (there are x records in our dataset with y columns. The key variables include event date, type of event (peaceful protest, protest with intervention, violence against civilians, etc.), actors involved in the event, location of the event, news source used to code the event, number of fatalities, and notes taken about the event by the researchers. 
 
 +  *At least three ideas of questions you can answer with your dataset, and how you might answer them using interactive statistical graphics.  This may include specific ideas about the types of graphs and interactions you'll create, or simply sentences like "What is the relationship between the age of shark attack victims and the year in which the shark attack occurred?  Does this change depending on the gender of the victim?"*
 
