@@ -1,0 +1,11 @@
+name: shinyappsdemo
+title:
+username:
+account: protestplots
+server: shinyapps.io
+hostUrl: https://api.shinyapps.io/v1
+appId: 4059207
+bundleId: 4540748
+url: https://protestplots.shinyapps.io/shinyappsdemo/
+when: 1619803968.67333
+lastSyncTime: 1619803968.67334
