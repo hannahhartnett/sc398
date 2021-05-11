@@ -56,6 +56,9 @@ for(i in 1:nrow(acled)) {
     acled$actor_label2[i] <- "Other"
 }
 
+# interacting groups variable (need to remove NAs)
+acled$groups <- paste(acled$actor_label1, "and", acled$actor_label2)
+
 # break fatality into two groups
 acled$fatality <- ifelse(acled$fatalities>0, "Yes", "No")
 ```
