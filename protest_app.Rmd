@@ -24,33 +24,36 @@ acled <- acled %>% filter(year == 2020)
 acled$event_date <- as.Date(acled$event_date, '%d-%b-%y')
 
 # categorical label for actor1 and actor 2
-data$actor_label1 <- NA
-data$actor_label2 <- NA
-for(i in 1:nrow(data)) {
-  if(grepl( "Protesters", data$actor1[i]))
-    data$actor_label1[i] <- "Protesters"
-  else if(grepl( "Police", data$actor1[i]))
-    data$actor_label1[i] <- "Police"
-  else if(grepl( "Sole Perp", data$actor1[i]))
-    data$actor_label1[i] <- "Sole Perpetrator"
-  else if(grepl( "Riot", data$actor1[i]))
-    data$actor_label1[i] <- "Rioters"
+acled$actor_label1 <- NA
+acled$actor_label2 <- NA
+for(i in 1:nrow(acled)) {
+  if(grepl( "Protesters", acled$actor1[i]))
+    acled$actor_label1[i] <- "Protesters"
+  else if(grepl( "Police", acled$actor1[i]))
+    acled$actor_label1[i] <- "Police"
+  else if(grepl( "Sole Perp", acled$actor1[i]))
+    acled$actor_label1[i] <- "Sole Perpetrator"
+  else if(grepl( "Riot", acled$actor1[i]))
+    acled$actor_label1[i] <- "Rioters"
   else
-    data$actor_label1[i] <- "Other"
+    acled$actor_label1[i] <- "Other"
 }
 
-for(i in 1:nrow(data)) {
-  if(grepl( "Protesters", data$actor2[i]))
-    data$actor_label2[i] <- "Protesters"
-  else if(grepl( "Police", data$actor2[i]))
-    data$actor_label2[i] <- "Police"
-  else if(grepl( "Sole Perp", data$actor2[i]))
-    data$actor_label2[i] <- "Sole Perpetrator"
-  else if(grepl( "Riot", data$actor2[i]))
-    data$actor_label2[i] <- "Rioters"
+for(i in 1:nrow(acled)) {
+  if(grepl( "Protesters", acled$actor2[i]))
+    acled$actor_label2[i] <- "Protesters"
+  else if(grepl( "Police", acled$actor2[i]))
+    acled$actor_label2[i] <- "Police"
+  else if(grepl( "Sole Perp", acled$actor2[i]))
+    acled$actor_label2[i] <- "Sole Perpetrator"
+  else if(grepl( "Riot", acled$actor2[i]))
+    acled$actor_label2[i] <- "Rioters"
   else
-    data$actor_label2[i] <- "Other"
+    acled$actor_label2[i] <- "Other"
 }
+
+# break fatality into two groups
+acled$fatality <- ifelse(acled$fatalities>0, "Yes", "No")
 ```
 
 Page 1
