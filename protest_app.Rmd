@@ -61,6 +61,24 @@ acled$groups <- paste(acled$actor_label1, "and", acled$actor_label2)
 
 # break fatality into two groups
 acled$fatality <- ifelse(acled$fatalities>0, "Yes", "No")
+
+# group interaction variable
+acled$groups <- paste(acled$actor_label1, "and", acled$actor_label2)
+
+# cleaning the group interaction variable
+acled$groups[acled$groups == "Other and NA"] <- "Other"
+acled$groups[acled$groups == "Other and Other"] <- "Other"
+acled$groups[acled$groups == "Rioters and NA"] <- "Rioters"
+acled$groups[acled$groups == "Protesters and NA"] <- "Protesters"
+acled$groups[acled$groups == "Sole Perpetrator and NA"] <- "Sole Perpetrator"
+acled$groups[acled$groups == "Police and NA"] <- "Police"
+acled$groups[acled$groups == "Protesters and Protesters"] <- "Protesters"
+acled$groups[acled$groups == "Police and Rioters"] <- "Rioters and Police"
+acled$groups[acled$groups == "Sole Perpetrator and Protesters"] <- "Protesters and Sole Perpetrator"
+acled$groups[acled$groups == "Other and Sole Perpetrator"] <- "Sole Perpetrator and Other"
+acled$groups[acled$groups == "Other and Police"] <- "Police and Other"
+acled$groups[acled$groups == "Sole Perpetrator and Police"] <- "Police and Sole Perpetrator"
+acled$groups[acled$groups == "Rioters and Rioters"] <- "Rioters"
 ```
 
 Page 1
@@ -184,7 +202,37 @@ Column {data-width=650, style="height:200pc;"}
 ### Chart A
 
 ```{r}
+tab1 <- select(acled, groups, fatality)
 
+death_table <- tab1 %>% 
+  group_by(groups) %>%
+  count(fatality)
+
+
+  
+ui <- shinyUI(
+  fluidPage(
+    titlePanel("Group"),
+    sidebarLayout(
+      sidebarPanel(
+        sliderInput("min_n", label = "Minimum Number of Incidents by Group",
+                  min = 0, max = 20, value = 20, step = 2)
+      ),
+      mainPanel(
+        plotOutput("incident_plot")
+      )
+    )
+  ))
+  
+  
+server <- shinyServer(function(input, output) {
+  output$incident_plot <- renderPlot({
+    ggplot(death_table %>% filter(n>input$min_n), aes(x=fatality, y=n, fill=groups))+
+      geom_col(position = "fill")
+  })
+})
+
+shinyApp(ui, server)
 ```
 
 Column {data-width=350}
