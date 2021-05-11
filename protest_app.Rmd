@@ -204,7 +204,7 @@ Column {data-width=650, style="height:200pc;"}
 ```{r}
 tab1 <- select(acled, groups, fatality)
 
-death_table <- tab1 %>% 
+death_table <- tab1 %>%
   group_by(groups) %>%
   count(fatality)
 
