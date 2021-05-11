@@ -130,5 +130,5 @@ shinyApp(ui = ui, server = server)
 
 
 #### Key Trends
-- The number of protests per day peak earlier in Minnesota and Georgia, the location of the murders of George Floyd and Ahmaud Arbery, respectively, than most other states. 
-- The overall number of protests in Washington D.C. is fewer than in most other states, but it peaks in the fall, at the peak of the election season for the 2020 Presidential Election.
+- The number of protests per day peaks earlier in Minnesota and Georgia, the location of the murders of George Floyd and Ahmaud Arbery, respectively, than most other states. 
+- The overall number of protests in Washington D.C. is fewer than in most other states, but it is greatest in the fall, at the peak of the election season for the 2020 Presidential Election.
