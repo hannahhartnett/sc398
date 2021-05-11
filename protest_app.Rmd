@@ -1,0 +1,134 @@
+---
+title: "United States Protest Events in 2020"
+output: 
+  flexdashboard::flex_dashboard:
+    orientation: columns
+    vertical_layout: scroll
+runtime: shiny
+---
+
+```{r setup, include=FALSE}
+library(flexdashboard)
+library(shiny)
+library(readr)
+library(dplyr)
+library(ggplot2)
+
+acled <- read_csv('./US-ACLED.csv')
+head(acled)
+
+# keep only 2020 events
+acled <- acled %>% filter(year == 2020)
+
+# format date
+acled$event_date <- as.Date(acled$event_date, '%d-%b-%y')
+```
+
+Page 1
+================================
+
+Column {data-width=650, style="height:200pc;"}
+-----------------------------------------------------------------------
+
+### Chart A
+
+```{r}
+
+```
+
+Column {data-width=350}
+-----------------------------------------------------------------------
+
+### Chart B
+
+```{r}
+
+# drill down sub event type
+
+ui <- shinyUI(
+  fluidPage(
+    titlePanel("Event Sub-Types"),
+    sidebarLayout(
+      sidebarPanel(
+        uiOutput("eventInput")
+      ),
+      mainPanel(
+        plotOutput("sub_eventPlot")
+      )
+    )
+  ))
+
+server <- shinyServer(function(input, output) {
+
+  output$eventInput <- renderUI({
+    selectInput(
+      inputId = "event",
+      label = "Select an Event Type:",
+      choices = levels(as.factor(acled$event_type))
+    )
+  })
+
+  output$sub_eventPlot <- renderPlot({
+    ggplot(acled %>% filter(event_type == input$event), aes(x = sub_event_type)) + geom_bar() +
+      labs(x = 'Sub Event Type',
+           y = 'Count', 
+           title = 'Count of Sub-Event Type')
+  })
+})
+
+shinyApp(ui = ui, server = server)
+```
+
+
+
+### Chart C
+
+```{r}
+library(lubridate)
+
+acled_time <- acled %>% group_by(admin1, event_date) %>% summarize(count = n())
+
+
+# view by state
+
+
+library(shiny)
+
+ui <- shinyUI(
+  fluidPage(
+    titlePanel("State"),
+    sidebarLayout(
+      sidebarPanel(
+        uiOutput("stateInput")
+      ),
+      mainPanel(
+        plotOutput("statePlot")
+      )
+    )
+  ))
+
+server <- shinyServer(function(input, output) {
+
+  output$stateInput <- renderUI({
+    selectInput(
+      inputId = "state",
+      label = "Select a State:",
+      choices = levels(as.factor(acled_time$admin1))
+    )
+  })
+
+  output$statePlot <- renderPlot({
+    ggplot(acled_time %>% filter(admin1 == input$state), aes(x = event_date, y = count)) + geom_line() +
+      labs(x = 'Event Date',
+           y = 'Count', 
+           title = 'Total Number of Protest Events per Day, by State')
+  })
+})
+
+shinyApp(ui = ui, server = server)
+```
+
+
+#### Key Trends
+- The number of protests per day peak earlier in Minnesota and Georgia, the location of the murders of George Floyd and Ahmaud Arbery, respectively, than most other states. 
+- The overall number of protests in Washington D.C. is fewer than in most other states, but it peaks in the fall, at the peak of the election season for the 2020 Presidential Election.
