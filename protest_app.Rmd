@@ -35,6 +35,8 @@ for(i in 1:nrow(acled)) {
     acled$actor_label1[i] <- "Sole Perpetrator"
   else if(grepl( "Riot", acled$actor1[i]))
     acled$actor_label1[i] <- "Rioters"
+  else if(is.na(acled$actor1[i]))
+    acled$actor_label2[i] <- "None"
   else
     acled$actor_label1[i] <- "Other"
 }
@@ -48,6 +50,8 @@ for(i in 1:nrow(acled)) {
     acled$actor_label2[i] <- "Sole Perpetrator"
   else if(grepl( "Riot", acled$actor2[i]))
     acled$actor_label2[i] <- "Rioters"
+  else if(is.na(acled$actor2[i]))
+    acled$actor_label2[i] <- "None"
   else
     acled$actor_label2[i] <- "Other"
 }
