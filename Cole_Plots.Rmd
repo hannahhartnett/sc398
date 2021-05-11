@@ -1,0 +1,120 @@
+---
+title: "Cole Plots"
+author: "Cole Guerin"
+date: "5/11/2021"
+output: html_document
+runtime: shiny
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(shiny)
+library(tidyverse)
+library(leaflet)
+
+acled <- read_csv("US-ACLED.csv")
+acled$event_date <- as.Date(acled$event_date, format="%d-%b-%y")
+acled$lab <- paste(sep = "<br/>",
+                   acled$event_date, acled$event_type, acled$location, acled$admin1)
+```
+
+```{r}
+shinyApp(
+  
+  ui = fluidPage(
+    inputPanel(
+      sliderInput("slider", "Dates:",
+                  min = as.Date("2020-01-01","%Y-%m-%d"), 
+                  max = as.Date("2020-12-31","%Y-%m-%d"), 
+                  value = c(as.Date("2020-04-01"), as.Date("2020-04-30")),
+                  timeFormat = "%Y-%m-%d")
+      
+    ),
+    
+    leafletOutput("event_map")
+  ),
+  
+  server = function(input, output) {
+    output$event_map <- renderLeaflet({
+      leaflet(acled %>% filter(event_date <= input$slider[2] & event_date >= input$slider[1])) %>%
+  addTiles() %>%
+  addCircles(lng = ~longitude, lat = ~latitude, label = ~lapply(lab, htmltools::HTML), popup = ~notes)
+      
+      
+    })
+  },
+  
+  options = list(height = 550)
+)
+```
+
+```{r}
+shinyApp(
+  
+  ui = fluidPage(
+    inputPanel(
+      radioButtons("time", label = "Time Frame:",
+                   choices = c("Before George Floyd's Death" = "Before George Floyd's Death",
+                               "Week After George Floyd's Death" = "Week After George Floyd's Death",
+                               "June" = "June",
+                               "July" = "July",
+                               "August" = "August",
+                               "September" = "September",
+                               "October" = "October",
+                               "November" = "November",
+                               "December" = "December"))
+      
+    ),
+    
+    leafletOutput("event_map")
+  ),
+  
+  
+  
+  server = function(input, output) {
+    
+    output$event_map <- renderLeaflet({
+
+if (input$time == "Before George Floyd's Death") {
+  min_date = "2020-01-01"
+  max_date = "2020-05-24"
+} else if (input$time == "Week After George Floyd's Death") {
+  min_date = "2020-05-25"
+  max_date = "2020-05-31"
+} else if (input$time == "June") {
+  min_date = "2020-06-01"
+  max_date = "2020-06-30"
+} else if (input$time == "July") {
+  min_date = "2020-07-01"
+  max_date = "2020-07-31"
+} else if (input$time == "August") {
+  min_date = "2020-08-01"
+  max_date = "2020-08-31"
+} else if (input$time == "September") {
+  min_date = "2020-09-01"
+  max_date = "2020-09-30"
+} else if (input$time == "October") {
+  min_date = "2020-10-01"
+  max_date = "2020-10-31"
+} else if (input$time == "November") {
+  min_date = "2020-11-01"
+  max_date = "2020-11-30"
+} else if (input$time == "December") {
+  min_date = "2020-12-01"
+  max_date = "2020-12-31"
+}
+      
+      leaflet(acled %>% filter(grepl("BLM", assoc_actor_1)) %>% filter(event_date <= max_date & event_date >= min_date)) %>%
+  addTiles() %>%
+  addCircles(lng = ~longitude, lat = ~latitude, label = ~lapply(lab, htmltools::HTML), popup = ~notes)
+      
+      
+    })
+  },
+  
+  options = list(height = 850)
+)
+```
