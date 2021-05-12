@@ -14,6 +14,7 @@ library(readr)
 library(dplyr)
 library(ggplot2)
 library(leaflet)
+library(plotly)
 
 acled <- read_csv('./US-ACLED.csv')
 head(acled)
@@ -279,7 +280,7 @@ Column {data-width=350}
 ```{r}
 library(zoo)
 
-acled %>%
+deaths_month <- acled %>%
   filter(fatalities>0) %>% 
   # use 'as.yearmon' to create a variable identifying the unique year-month
   # combination in which each observation falls
@@ -293,6 +294,7 @@ acled %>%
   # instead of 'geom_hist' to preserve the temporal ordering and avoid
   # having to specify stat = "identity"
   ggplot(aes(x = yearmon, y = n)) + geom_col()
+ggplotly(deaths_month)
 ```
 
 
