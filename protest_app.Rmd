@@ -272,6 +272,10 @@ server <- shinyServer(function(input, output) {
 shinyApp(ui, server)
 ```
 
+#### Key Trends
+- Incidents with no fatalities vastly outnumber incidents with fatalities, as can be seen by the count figure.
+- The vast majority of non-fatality incidents involve only protests, while the vast majority of incidents with a fatality involved Police officers.
+
 Column {data-width=400, style="height:35pc;"}
 -----------------------------------------------------------------------
 
@@ -300,6 +304,9 @@ deaths_month <- acled %>%
 ggplotly(deaths_month, tooltip = c("n"))
 ```
 
+#### Key Trends
+- Incidents involving a fatality peaked in the summer of 2020 with June being the month with the most fatalities.
+- Incidents involving a fatality make up a small proportion of total incidents by month.
 
 Page 3
 ================================
