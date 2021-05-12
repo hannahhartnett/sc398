@@ -226,7 +226,7 @@ Page 2
 ================================
 
 
-Column {data-width=650, style="height:200pc;"}
+Column {data-width=650, style="height:1000pc;"}
 -----------------------------------------------------------------------
 
 ### Chart A
@@ -271,7 +271,7 @@ server <- shinyServer(function(input, output) {
 shinyApp(ui, server)
 ```
 
-Column {data-width=350}
+Column {data-width=400, style="height:35pc;"}
 -----------------------------------------------------------------------
 
 ### Chart B
