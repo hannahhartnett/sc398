@@ -295,7 +295,8 @@ deaths_month <- acled %>%
   # instead of 'geom_hist' to preserve the temporal ordering and avoid
   # having to specify stat = "identity"
   ggplot(aes(x = yearmon, y = n)) + geom_col() +
-  labs(x = "Month", y = "Number of Deaths", title = "Number of Total Deaths by Month")
+  labs(x = "Month", y = "Number of Deaths", title = "Number of Total Deaths by Month") + 
+  theme(axis.text.x = element_text(angle = 45, hjust = 1, vjust = 0.5))
 ggplotly(deaths_month, tooltip = c("n"))
 ```
 
