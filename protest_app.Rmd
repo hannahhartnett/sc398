@@ -233,19 +233,25 @@ Column {data-width=650, style="height:200pc;"}
 ```{r}
 tab1 <- select(acled, groups, fatality)
 
-death_table <- tab1 %>%
+death_table <- tab1 %>% 
   group_by(groups) %>%
   count(fatality)
 
+plotType <- function(input) {
+  switch(input,
+         Count = "stack",
+         Proportional = "fill")
+}
 
-  
 ui <- shinyUI(
   fluidPage(
     titlePanel("Group"),
     sidebarLayout(
       sidebarPanel(
         sliderInput("min_n", label = "Minimum Number of Incidents by Group",
-                  min = 0, max = 20, value = 20, step = 2)
+                  min = 0, max = 20, value = 20, step = 2),
+        radioButtons("pType", "Choose plot type:",
+                 list("Count", "Proportional"))
       ),
       mainPanel(
         plotOutput("incident_plot")
@@ -257,7 +263,7 @@ ui <- shinyUI(
 server <- shinyServer(function(input, output) {
   output$incident_plot <- renderPlot({
     ggplot(death_table %>% filter(n>input$min_n), aes(x=fatality, y=n, fill=groups))+
-      geom_col(position = "fill")
+      geom_bar(position = plotType(input$pType), stat = "identity")
   })
 })
 
