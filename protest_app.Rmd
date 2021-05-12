@@ -264,7 +264,8 @@ ui <- shinyUI(
 server <- shinyServer(function(input, output) {
   output$incident_plot <- renderPlot({
     ggplot(death_table %>% filter(n>input$min_n), aes(x=fatality, y=n, fill=groups))+
-      geom_bar(position = plotType(input$pType), stat = "identity")
+      geom_bar(position = plotType(input$pType), stat = "identity")+
+      labs(x = "Fatality?", y = "Number of Incidents", fill = "Groups Involved")
   })
 })
 
@@ -293,8 +294,9 @@ deaths_month <- acled %>%
   # plot the resulting series with yearmon on the x-axis and using 'geom_col'
   # instead of 'geom_hist' to preserve the temporal ordering and avoid
   # having to specify stat = "identity"
-  ggplot(aes(x = yearmon, y = n)) + geom_col()
-ggplotly(deaths_month)
+  ggplot(aes(x = yearmon, y = n)) + geom_col() +
+  labs(x = "Month", y = "Number of Deaths", title = "Number of Total Deaths by Month")
+ggplotly(deaths_month, tooltip = c("n"))
 ```
 
 
