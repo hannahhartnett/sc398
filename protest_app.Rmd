@@ -15,6 +15,9 @@ library(dplyr)
 library(ggplot2)
 library(leaflet)
 library(plotly)
+library(shinythemes)
+
+shinythemes::themeSelector()
 
 acled <- read_csv('./US-ACLED.csv')
 head(acled)
@@ -96,7 +99,7 @@ Column {data-width=650, style="height:200pc;"}
 ```{r}
 shinyApp(
   
-  ui = fluidPage(
+  ui = fluidPage(theme = shinytheme("cerulean"),
     inputPanel(
       sliderInput("slider", "Dates:",
                   min = as.Date("2020-01-01","%Y-%m-%d"), 
@@ -133,7 +136,7 @@ Column {data-width=350}
 # drill down sub event type
 
 ui <- shinyUI(
-  fluidPage(
+  fluidPage(theme = shinytheme("cerulean"),
     titlePanel("Event Sub-Types"),
     sidebarLayout(
       sidebarPanel(
@@ -182,7 +185,7 @@ acled_time <- acled %>% group_by(admin1, event_date) %>% summarize(count = n())
 library(shiny)
 
 ui <- shinyUI(
-  fluidPage(
+  fluidPage(theme = shinytheme("cerulean"),
     titlePanel("State"),
     sidebarLayout(
       sidebarPanel(
@@ -245,7 +248,7 @@ plotType <- function(input) {
 }
 
 ui <- shinyUI(
-  fluidPage(
+  fluidPage(theme = shinytheme("cerulean"),
     titlePanel("Group"),
     sidebarLayout(
       sidebarPanel(
@@ -312,7 +315,7 @@ Column {data-width=650, style="height:200pc;"}
 ```{r}
 shinyApp(
   
-  ui = fluidPage(
+  ui = fluidPage(theme = shinytheme("cerulean"),
     inputPanel(
       radioButtons("time", label = "Time Frame:",
                    choices = c("Before George Floyd's Death" = "Before George Floyd's Death",
