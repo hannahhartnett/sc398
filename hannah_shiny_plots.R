@@ -61,6 +61,9 @@ shinyApp(ui = ui, server = server)
 
 
 
+Here we can see a wide variety of different protest events in the US in 2020; the vast majority were peaceful protests, but we also see a large number of protests with intervention and violent demonstrations.
+
+
 ### time series
 
 library(lubridate)

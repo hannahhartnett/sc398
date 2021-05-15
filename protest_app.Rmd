@@ -288,7 +288,7 @@ Column {data-width=650, style="height:200pc;"}
 -----------------------------------------------------------------------
 
 
-In the year of the 'new normal,' we have experienced many momentous and novel events: a global pandemic; increased awareness of national racial injustices, specifically on the part of the police force, as a result of the murders of countless Black Americans; and a contentious presidential election. This interactive app is intended as an accompaniment to year-end news summaries, to aid investigation of protest events as a response to these significant new phenomena. The app was created using data from the Armed Conflict Location and Event Data Project: https://github.com/hannahhartnett/sc398/blob/main/US-ACLED.csv. 
+In the year of the 'new normal,' we have experienced many momentous and novel events: a global pandemic; increased awareness of national racial injustices, specifically on the part of the police force, as a result of the murders of countless Black Americans; and a contentious presidential election. This interactive app is intended as an accompaniment to year-end news summaries, to aid investigation of protest events as a response to these significant new phenomena. How have Americans gathered to react to national events in 2020? The app was created using data from the Armed Conflict Location and Event Data Project: https://github.com/hannahhartnett/sc398/blob/main/US-ACLED.csv. 
 
 
 ### Chart A
