@@ -53,7 +53,8 @@ server <- shinyServer(function(input, output) {
   output$sub_eventPlot <- renderPlot({
     ggplot(acled %>% filter(event_type == input$event), aes(x = sub_event_type)) + geom_bar() +
       labs(x = 'Sub Event Type',
-           y = 'Count')
+           y = 'Count') +
+      scale_fill_manual(values="blue")
   })
 })
 

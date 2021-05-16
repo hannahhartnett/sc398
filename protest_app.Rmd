@@ -32,7 +32,7 @@ Column {data-width=600, style="height:200pc;"}
 In the year of the 'new normal,' we have experienced many momentous and novel events: a global pandemic; increased awareness of national racial injustices, specifically on the part of the police force, as a result of the murders of countless Black Americans; and a contentious presidential election. This interactive app is intended as an accompaniment to year-end news summaries, to aid investigation of protest events as a response to these significant new phenomena. How have Americans gathered to react to national events in 2020? The app was created using data from the Armed Conflict Location and Event Data Project: https://github.com/hannahhartnett/sc398/blob/main/US-ACLED.csv. 
 
 
-### Chart A
+### Event Locations
 
 ```{r}
 shinyApp(
@@ -70,13 +70,12 @@ This map is capable of displaying all protest events that occurred in the United
 Column {data-width=400}
 -----------------------------------------------------------------------
 
-### Chart B
+### Sub-Event Types
 
 ```{r}
 # drill down sub event type
 ui <- shinyUI(
   fluidPage(theme = shinytheme("cerulean"),
-    titlePanel("Event Sub-Types"),
     sidebarLayout(
       sidebarPanel(
         uiOutput("eventInput")
@@ -99,7 +98,8 @@ server <- shinyServer(function(input, output) {
     ggplotly(ggplot(acled %>% filter(event_type == input$event), aes(x = sub_event_type)) + geom_bar() +
       labs(x = 'Sub Event Type',
            y = 'Count', 
-           title = 'Count of Sub-Event Type'), 
+           title = 'Count of Sub-Event Type') +
+  scale_color_manual(values='blue'), 
       tooltip = 'y')
   })
   })
@@ -109,7 +109,7 @@ shinyApp(ui = ui, server = server, options = list(height = 350))
 There were a wide variety of different protest events in the US in 2020; the vast majority were peaceful protests, but we also see a large number of protests with intervention and violent demonstrations.
 
 
-### Chart C
+### Events by State
 
 ```{r}
 library(lubridate)
@@ -118,7 +118,6 @@ acled_time <- acled %>% group_by(admin1, event_date) %>% summarize(count = n())
 library(shiny)
 ui <- shinyUI(
   fluidPage(theme = shinytheme("cerulean"),
-    titlePanel("State"),
     sidebarLayout(
       sidebarPanel(
         uiOutput("stateInput")
@@ -255,7 +254,7 @@ Fatalities
 Column {data-width=650, style="height:1000pc;"}
 -----------------------------------------------------------------------
 
-### Chart A
+### Fatalities by Actor
 
 ```{r}
 tab1 <- select(acled, groups, fatality)
@@ -301,7 +300,7 @@ shinyApp(ui, server)
 Column {data-width=400, style="height:35pc;"}
 -----------------------------------------------------------------------
 
-### Chart B
+### Total Fatalities
 
 
 ```{r}
@@ -337,7 +336,7 @@ Black Lives Matter Protests
 Column {data-width=650, style="height:200pc;"}
 -----------------------------------------------------------------------
 
-### Chart A
+### Black Lives Matter Protests
 
 ```{r}
 shinyApp(
