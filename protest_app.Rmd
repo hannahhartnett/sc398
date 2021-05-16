@@ -26,7 +26,7 @@ acled <- read_csv('acled.csv')
 Event Type and Location
 ================================
 
-Column {data-width=650, style="height:200pc;"}
+Column {data-width=600, style="height:200pc;"}
 -----------------------------------------------------------------------
 
 
@@ -61,11 +61,11 @@ shinyApp(
     })
   },
   
-  options = list(height = 550)
+  options = list(height = 800)
 )
 ```
 
-Column {data-width=350}
+Column {data-width=400}
 -----------------------------------------------------------------------
 
 ### Chart B
@@ -82,7 +82,8 @@ ui <- shinyUI(
         uiOutput("eventInput")
       ),
       mainPanel(
-        plotOutput("sub_eventPlot")
+        plotOutput("sub_eventPlot", 
+                   height = '250px')
       )
     )
   ))
@@ -103,9 +104,9 @@ server <- shinyServer(function(input, output) {
            y = 'Count', 
            title = 'Count of Sub-Event Type')
   })
-})
+  })
 
-shinyApp(ui = ui, server = server)
+shinyApp(ui = ui, server = server, options = list(height = 350))
 ```
 
 There were a wide variety of different protest events in the US in 2020; the vast majority were peaceful protests, but we also see a large number of protests with intervention and violent demonstrations.
@@ -132,7 +133,8 @@ ui <- shinyUI(
         uiOutput("stateInput")
       ),
       mainPanel(
-        plotOutput("statePlot")
+        plotOutput("statePlot", 
+                   height = '250px')
       )
     )
   ))
@@ -155,7 +157,7 @@ server <- shinyServer(function(input, output) {
   })
 })
 
-shinyApp(ui = ui, server = server)
+shinyApp(ui = ui, server = server, options = list(height = 350))
 ```
 
 
