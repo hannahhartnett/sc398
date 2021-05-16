@@ -311,6 +311,9 @@ ggplotly(deaths_month, tooltip = c("n"))
 - Incidents involving a fatality peaked in the summer of 2020 with June being the month with the most fatalities.
 - Incidents involving a fatality make up a small proportion of total incidents by month.
 
+
+
+
 Page 3
 ================================
 
