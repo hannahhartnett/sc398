@@ -7,7 +7,7 @@ output:
 runtime: shiny
 ---
 
-```{r setup, include=FALSE}
+```{r}
 library(flexdashboard)
 library(shiny)
 library(readr)
@@ -16,83 +16,20 @@ library(ggplot2)
 library(leaflet)
 library(plotly)
 library(shinythemes)
-
 shinythemes::themeSelector()
-
-acled <- read_csv('./US-ACLED.csv')
-head(acled)
-
-# keep only 2020 events
-acled <- acled %>% filter(year == 2020)
-
-# format date
-acled$event_date <- as.Date(acled$event_date, '%d-%b-%y')
-acled$lab <- paste(sep = "<br/>",
-                   acled$event_date, acled$event_type, acled$location, acled$admin1)
-
-# categorical label for actor1 and actor 2
-acled$actor_label1 <- NA
-acled$actor_label2 <- NA
-for(i in 1:nrow(acled)) {
-  if(grepl( "Protesters", acled$actor1[i]))
-    acled$actor_label1[i] <- "Protesters"
-  else if(grepl( "Police", acled$actor1[i]))
-    acled$actor_label1[i] <- "Police"
-  else if(grepl( "Sole Perp", acled$actor1[i]))
-    acled$actor_label1[i] <- "Sole Perpetrator"
-  else if(grepl( "Riot", acled$actor1[i]))
-    acled$actor_label1[i] <- "Rioters"
-  else if(is.na(acled$actor1[i]))
-    acled$actor_label2[i] <- "None"
-  else
-    acled$actor_label1[i] <- "Other"
-}
-
-for(i in 1:nrow(acled)) {
-  if(grepl( "Protesters", acled$actor2[i]))
-    acled$actor_label2[i] <- "Protesters"
-  else if(grepl( "Police", acled$actor2[i]))
-    acled$actor_label2[i] <- "Police"
-  else if(grepl( "Sole Perp", acled$actor2[i]))
-    acled$actor_label2[i] <- "Sole Perpetrator"
-  else if(grepl( "Riot", acled$actor2[i]))
-    acled$actor_label2[i] <- "Rioters"
-  else if(is.na(acled$actor2[i]))
-    acled$actor_label2[i] <- "None"
-  else
-    acled$actor_label2[i] <- "Other"
-}
-
-# interacting groups variable (need to remove NAs)
-acled$groups <- paste(acled$actor_label1, "and", acled$actor_label2)
-
-# break fatality into two groups
-acled$fatality <- ifelse(acled$fatalities>0, "Yes", "No")
-
-# group interaction variable
-acled$groups <- paste(acled$actor_label1, "and", acled$actor_label2)
-
-# cleaning the group interaction variable
-acled$groups[acled$groups == "Other and NA"] <- "Other"
-acled$groups[acled$groups == "Other and Other"] <- "Other"
-acled$groups[acled$groups == "Rioters and NA"] <- "Rioters"
-acled$groups[acled$groups == "Protesters and NA"] <- "Protesters"
-acled$groups[acled$groups == "Sole Perpetrator and NA"] <- "Sole Perpetrator"
-acled$groups[acled$groups == "Police and NA"] <- "Police"
-acled$groups[acled$groups == "Protesters and Protesters"] <- "Protesters"
-acled$groups[acled$groups == "Police and Rioters"] <- "Rioters and Police"
-acled$groups[acled$groups == "Sole Perpetrator and Protesters"] <- "Protesters and Sole Perpetrator"
-acled$groups[acled$groups == "Other and Sole Perpetrator"] <- "Sole Perpetrator and Other"
-acled$groups[acled$groups == "Other and Police"] <- "Police and Other"
-acled$groups[acled$groups == "Sole Perpetrator and Police"] <- "Police and Sole Perpetrator"
-acled$groups[acled$groups == "Rioters and Rioters"] <- "Rioters"
+acled <- read_csv('acled.csv')
 ```
 
-Page 1
+
+Event Type and Location
 ================================
 
 Column {data-width=600, style="height:200pc;"}
 -----------------------------------------------------------------------
+
+
+In the year of the 'new normal,' we have experienced many momentous and novel events: a global pandemic; increased awareness of national racial injustices, specifically on the part of the police force, as a result of the murders of countless Black Americans; and a contentious presidential election. This interactive app is intended as an accompaniment to year-end news summaries, to aid investigation of protest events as a response to these significant new phenomena. How have Americans gathered to react to national events in 2020? The app was created using data from the Armed Conflict Location and Event Data Project: https://github.com/hannahhartnett/sc398/blob/main/US-ACLED.csv. 
+
 
 ### Chart A
 
@@ -132,9 +69,7 @@ Column {data-width=400}
 ### Chart B
 
 ```{r}
-
 # drill down sub event type
-
 ui <- shinyUI(
   fluidPage(theme = shinytheme("cerulean"),
     titlePanel("Event Sub-Types"),
@@ -148,9 +83,7 @@ ui <- shinyUI(
       )
     )
   ))
-
 server <- shinyServer(function(input, output) {
-
   output$eventInput <- renderUI({
     selectInput(
       inputId = "event",
@@ -158,7 +91,6 @@ server <- shinyServer(function(input, output) {
       choices = levels(as.factor(acled$event_type))
     )
   })
-
   output$sub_eventPlot <- renderPlot({
     ggplot(acled %>% filter(event_type == input$event), aes(x = sub_event_type)) + geom_bar() +
       labs(x = 'Sub Event Type',
@@ -166,25 +98,19 @@ server <- shinyServer(function(input, output) {
            title = 'Count of Sub-Event Type')
   })
   })
-
 shinyApp(ui = ui, server = server, options = list(height = 350))
 ```
 
+There were a wide variety of different protest events in the US in 2020; the vast majority were peaceful protests, but we also see a large number of protests with intervention and violent demonstrations.
 
 
 ### Chart C
 
 ```{r}
 library(lubridate)
-
 acled_time <- acled %>% group_by(admin1, event_date) %>% summarize(count = n())
-
-
 # view by state
-
-
 library(shiny)
-
 ui <- shinyUI(
   fluidPage(theme = shinytheme("cerulean"),
     titlePanel("State"),
@@ -198,9 +124,7 @@ ui <- shinyUI(
       )
     )
   ))
-
 server <- shinyServer(function(input, output) {
-
   output$stateInput <- renderUI({
     selectInput(
       inputId = "state",
@@ -208,7 +132,6 @@ server <- shinyServer(function(input, output) {
       choices = levels(as.factor(acled_time$admin1))
     )
   })
-
   output$statePlot <- renderPlot({
     ggplot(acled_time %>% filter(admin1 == input$state), aes(x = event_date, y = count)) + geom_line() +
       labs(x = 'Event Date',
@@ -216,7 +139,6 @@ server <- shinyServer(function(input, output) {
            title = 'Total Number of Protest Events per Day, by State')
   })
 })
-
 shinyApp(ui = ui, server = server, options = list(height = 350))
 ```
 
@@ -226,8 +148,56 @@ shinyApp(ui = ui, server = server, options = list(height = 350))
 - The overall number of protests in Washington D.C. is fewer than in most other states, but it is greatest in the fall, at the peak of the election season for the 2020 Presidential Election.
 
 
+Event Actors
+================================
 
-Page 2
+
+Column {data-width=650, style="height:1000pc;"}
+-----------------------------------------------------------------------
+
+### Chart A
+```{r}
+actorList <- unique(acled$assoc_actor_label1)
+ui <- shinyUI(
+  fluidPage(
+    titlePanel("Actor Groups"),
+    sidebarLayout(
+      sidebarPanel(
+         checkboxGroupInput("actor", "Choose Actors", choices = actorList, selected = c("AltRight", "Democrats", "Leftist", "Progressive", "Republicans"))
+      ),
+      mainPanel(
+        plotOutput("actorPlot")
+      )
+    )
+  ))
+server <- shinyServer(function(input, output) {
+  # output$actorInput <- renderUI({
+  #   selectInput(
+  #     inputId = "actor",
+  #     label = "Select an Actor:",
+  #     choices = levels(as.factor(acled$assoc_actor_label1))
+  #   )
+  # })
+  output$actorPlot <- renderPlot({
+    ggplot(acled %>% filter(assoc_actor_label1 == c(input$actor)), aes(x = assoc_actor_label1, fill = assoc_actor_label1)) + geom_bar() +
+      labs(x = 'Actor Groups',
+           y = 'Count', 
+           fill = 'Actor Groups',
+           title = 'Total Number of Events Participated in by Actor Groups')
+  })
+})
+shinyApp(ui = ui, server = server)
+```
+#### Key Trends
+  - Black Lives Matter and other groups protesting for the end of racist institutions, policies, etc. were by far the most active group in 2020
+  - Many other groups were also active and it would be interesting for a study to be done on a historical basis comparing their activity over time
+  
+#### Information About Data
+  Actor groups are categorized by affliation. So, BLM protestors, African American designated groups, the ACLU, and NAACP are all incorporated under the tag "BLM-Related". Migrant Rights includes ABOLISH ICE protestors, DREAMers, Refugees, La Resistancia, and other migrant identified groups. Similarly, politically affiliated groups included Republican identified groups and Democrat identified groups. We also categorized a few other politically based groups such as Progressive organizations like the MoveOn movement, the Indivisible Movement, the Sunrise Movement and Democratic Socialists for America as well as more leftist operating groups such as Communists, Socialists, ANTIFA and other anti-fascist identified groups. Similarly, groups such as the Boogaloo Boys, Proud Boys, Tea Party, White Nationalists, QAnon, and Patriot Party groups were all lumped together under the tag AltRight. The remaining tags were all generated by the keywords implied in their names, with those that remained grouped together as "Other".
+
+
+
+Fatalities
 ================================
 
 
@@ -238,17 +208,14 @@ Column {data-width=650, style="height:1000pc;"}
 
 ```{r}
 tab1 <- select(acled, groups, fatality)
-
 death_table <- tab1 %>% 
   group_by(groups) %>%
   count(fatality)
-
 plotType <- function(input) {
   switch(input,
          Count = "stack",
          Proportional = "fill")
 }
-
 ui <- shinyUI(
   fluidPage(theme = shinytheme("cerulean"),
     titlePanel("Group"),
@@ -273,7 +240,6 @@ server <- shinyServer(function(input, output) {
       labs(x = "Fatality?", y = "Number of Incidents", fill = "Groups Involved")
   })
 })
-
 shinyApp(ui, server)
 ```
 
@@ -289,7 +255,17 @@ Column {data-width=400, style="height:35pc;"}
 
 ```{r}
 library(zoo)
-
+shinyApp(
+  
+  ui = fluidPage(theme = shinytheme("cerulean"),
+    plotlyOutput("page2chartB")
+  ),
+  
+  
+  
+  server = function(input, output) {
+    
+    output$page2chartB <- renderPlotly({
 deaths_month <- acled %>%
   filter(fatalities>0) %>% 
   # use 'as.yearmon' to create a variable identifying the unique year-month
@@ -307,16 +283,16 @@ deaths_month <- acled %>%
   labs(x = "Month", y = "Number of Deaths", title = "Number of Total Deaths by Month") + 
   theme(axis.text.x = element_text(angle = 45, hjust = 1, vjust = 0.5))
 ggplotly(deaths_month, tooltip = c("n"))
+    })
+  }
+)
 ```
 
 #### Key Trends
 - Incidents involving a fatality peaked in the summer of 2020 with June being the month with the most fatalities.
 - Incidents involving a fatality make up a small proportion of total incidents by month.
 
-
-
-
-Page 3
+Black Lives Matter Protests
 ================================
 
 
@@ -351,7 +327,6 @@ shinyApp(
   server = function(input, output) {
     
     output$event_map <- renderLeaflet({
-
 if (input$time == "Before George Floyd's Death") {
   min_date = "2020-01-01"
   max_date = "2020-05-24"
