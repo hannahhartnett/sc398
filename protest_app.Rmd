@@ -184,10 +184,9 @@ server <- shinyServer(function(input, output) {
   #   )
   # })
   output$actorPlot <- renderPlot({
-    ggplot(acled %>% filter(assoc_actor_label1 == c(input$actor)), aes(x = assoc_actor_label1, fill = assoc_actor_label1)) + geom_bar() +
+    ggplot(acled %>% filter(assoc_actor_label1 == c(input$actor)), aes(x = assoc_actor_label1)) + geom_bar() +
       labs(x = 'Actor Groups',
-           y = 'Count', 
-           fill = 'Actor Groups',
+           y = 'Count',
            title = 'Total Number of Events Participated in by Actor Groups')
   })
 })
