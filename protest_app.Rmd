@@ -258,7 +258,6 @@ Column {data-width=400, style="height:35pc;"}
 
 
 ```{r}
-library(zoo)
 shinyApp(
   
   ui = fluidPage(theme = shinytheme("cerulean"),
