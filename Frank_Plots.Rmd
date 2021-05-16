@@ -1,0 +1,155 @@
+---
+title: "Frank Plots"
+output: 
+  flexdashboard::flex_dashboard:
+    orientation: columns
+    vertical_layout: scroll
+runtime: shiny
+---
+
+```{r setup, include=FALSE}
+library(flexdashboard)
+library(shiny)
+library(readr)
+library(dplyr)
+library(ggplot2)
+library(tidyverse)
+library(plotly)
+
+acled <- read_csv('./US-ACLED.csv')
+head(acled)
+
+# keep only 2020 events
+acled <- acled %>% filter(year == 2020)
+
+# format date
+acled$event_date <- as.Date(acled$event_date, '%d-%b-%y')
+
+# categorical label for actor1 and actor 2
+acled$actor_label1 <- NA
+acled$actor_label2 <- NA
+for(i in 1:nrow(acled)) {
+  if(grepl( "Protesters", acled$actor1[i]))
+    acled$actor_label1[i] <- "Protesters"
+  else if(grepl( "Police", acled$actor1[i]))
+    acled$actor_label1[i] <- "Police"
+  else if(grepl( "Sole Perp", acled$actor1[i]))
+    acled$actor_label1[i] <- "Sole Perpetrator"
+  else if(grepl( "Riot", acled$actor1[i]))
+    acled$actor_label1[i] <- "Rioters"
+  else if(is.na(acled$actor1[i]))
+    acled$actor_label2[i] <- NA
+  else
+    acled$actor_label1[i] <- "Other"
+}
+
+for(i in 1:nrow(acled)) {
+  if(grepl( "Protesters", acled$actor2[i]))
+    acled$actor_label2[i] <- "Protesters"
+  else if(grepl( "Police", acled$actor2[i]))
+    acled$actor_label2[i] <- "Police"
+  else if(grepl( "Sole Perp", acled$actor2[i]))
+    acled$actor_label2[i] <- "Sole Perpetrator"
+  else if(grepl( "Riot", acled$actor2[i]))
+    acled$actor_label2[i] <- "Rioters"
+  else if(is.na(acled$actor2[i]))
+    acled$actor_label2[i] <- ""
+  else
+    acled$actor_label2[i] <- "Other"
+}
+
+# break fatality into two groups
+acled$fatality <- ifelse(acled$fatalities>0, "Yes", "No")
+
+library(zoo)
+
+count2 <- acled %>% 
+  mutate(yearmon = as.yearmon(event_date)) %>%
+  # use that variable to group the data
+  group_by(yearmon) %>% 
+  # count the number of observations in each of those year-month bins. if you
+  # want to summarise the data some other way, use 'summarise' here instead.
+  count()
+
+count1 <- acled %>%
+  filter(fatalities>0) %>% 
+  # use 'as.yearmon' to create a variable identifying the unique year-month
+  # combination in which each observation falls
+  mutate(yearmon = as.yearmon(event_date)) %>%
+  # use that variable to group the data
+  group_by(yearmon) %>% 
+  # count the number of observations in each of those year-month bins. if you
+  # want to summarise the data some other way, use 'summarise' here instead.
+  count()
+  # plot the resulting series with yearmon on the x-axis and using 'geom_col'
+  # instead of 'geom_hist' to preserve the temporal ordering and avoid
+  # having to specify stat = "identity"
+count1$PctTot <- (count1$n/count2$n)*100
+
+ggplot(aes(x = yearmon, y = n)) + geom_col()
+ggplotly(deaths_month)
+```
+
+```{r}
+acled$groups <- paste(acled$actor_label1, "and", acled$actor_label2)
+
+acled$groups[acled$groups == "Other and NA"] <- "Other"
+acled$groups[acled$groups == "Other and Other"] <- "Other"
+acled$groups[acled$groups == "Rioters and NA"] <- "Rioters"
+acled$groups[acled$groups == "Protesters and NA"] <- "Protesters"
+acled$groups[acled$groups == "Sole Perpetrator and NA"] <- "Sole Perpetrator"
+acled$groups[acled$groups == "Police and NA"] <- "Police"
+acled$groups[acled$groups == "Protesters and Protesters"] <- "Protesters"
+acled$groups[acled$groups == "Police and Rioters"] <- "Rioters and Police"
+acled$groups[acled$groups == "Sole Perpetrator and Protesters"] <- "Protesters and Sole Perpetrator"
+acled$groups[acled$groups == "Other and Sole Perpetrator"] <- "Sole Perpetrator and Other"
+acled$groups[acled$groups == "Other and Police"] <- "Police and Other"
+acled$groups[acled$groups == "Sole Perpetrator and Police"] <- "Police and Sole Perpetrator"
+acled$groups[acled$groups == "Rioters and Rioters"] <- "Rioters"
+
+tab1 <- select(acled, groups, fatality)
+
+death_table <- tab1 %>% 
+  group_by(groups) %>%
+  count(fatality)
+
+plotType <- function(input) {
+  switch(input,
+         Count = "stack",
+         Proportional = "fill")
+}
+
+ui <- shinyUI(
+  fluidPage(
+    titlePanel("Group"),
+    sidebarLayout(
+      sidebarPanel(
+        sliderInput("min_n", label = "Minimum Number of Incidents by Group",
+                  min = 0, max = 20, value = 20, step = 2),
+        radioButtons("pType", "Choose plot type:",
+                 list("Count", "Proportional"))
+      ),
+      mainPanel(
+        plotOutput("incident_plot")
+      )
+    )
+  ))
+  
+  
+server <- shinyServer(function(input, output) {
+  output$incident_plot <- renderPlot({
+    ggplot(death_table %>% filter(n>input$min_n), aes(x=fatality, y=n, fill=groups))+
+      geom_bar(position = plotType(input$pType), stat = "identity")
+  })
+})
+
+shinyApp(ui, server)
+```
+
+#### Key Trends
+- Incidents involving a fatality peaked in the summer of 2020 with June being the month with the most fatalities.
+- Incidents involving a fatality make up a small proportion of total incidents by month.
+
+#### Key Trends
+- Incidents with no fatalities vastly outnumber incidents with fatalities, as can be seen by the count figure.
+- The vast majority of non-fatality incidents involve only protests, while the vast majority of incidents with a fatality involved Police officers.
