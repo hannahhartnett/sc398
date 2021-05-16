@@ -25,6 +25,7 @@ acled$lab <- paste(sep = "<br/>",
 shinyApp(
   
   ui = fluidPage(
+    titlePanel("Protest Events During 2020"),
     inputPanel(
       sliderInput("slider", "Dates:",
                   min = as.Date("2020-01-01","%Y-%m-%d"), 
@@ -51,11 +52,15 @@ shinyApp(
 )
 ```
 
+This map is capable of displaying all protest events that occurred in the United States over the course of 2020. Each point represents one day that the event was occurring. The map displays dates, type of event, and location if a point is hovered over, as well as key notes on the event if a point is clicked on. The slider can change the timeframe that the plot displays, and choosing the Sub-Event Type in the plot to the right will also filter this map accordingly.
+
 ```{r}
 shinyApp(
   
   ui = fluidPage(
-    inputPanel(
+    titlePanel("Growth of Black Lives Matter Movement"),
+    sidebarLayout(
+      sidebarPanel(
       radioButtons("time", label = "Time Frame:",
                    choices = c("Before George Floyd's Death" = "Before George Floyd's Death",
                                "Week After George Floyd's Death" = "Week After George Floyd's Death",
@@ -68,9 +73,8 @@ shinyApp(
                                "December" = "December"))
       
     ),
-    
-    leafletOutput("event_map")
-  ),
+    mainPanel(leafletOutput("event_map"))
+  )),
   
   
   
@@ -115,6 +119,8 @@ if (input$time == "Before George Floyd's Death") {
     })
   },
   
-  options = list(height = 850)
+  options = list(height = 550)
 )
 ```
+
+This map has many of the same dynamic options as our opening map, with the exeption of of the timeframe is selected. This map shows how the Black Lives Matter Movement has grown tremendously in the United States over the course of 2020. Based on the timeframes, changes in frequency of protests associating with BLM are easily visible. After George Floyd's death, the amount of BLM protests really spiked and continued into June. As time wore on for the rest of the year, the amount of protests did gradually drop, but continued to be way more frequent than in the first five months of 2020. The protests associated with George Floyd's death raised awarness and allowed more people to join the cause and protest other instances of violence against black lives. Youc an see in the later months of 2020 that all of the points are not directly referencing George Floyd in the notes, and instead are focused on other American citizens and their stories.
