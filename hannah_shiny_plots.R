@@ -110,3 +110,14 @@ shinyApp(ui = ui, server = server)
 # peak earlier in the summer than most other states
 # DC has higher concentration of protests in fall (election) but fewer overall than most states
 
+
+ggplot(acled %>% filter(event_type == 'Protests'), aes(x = sub_event_type)) + geom_bar() +
+  scale_fill_manual(values=c("blue")) +
+  labs(x = 'Sub Event Type',
+       y = 'Count')
+
+
+ggplot(acled_time %>% filter(admin1 == 'Maine'), aes(x = event_date, y = count)) + geom_line() +
+  scale_colour_manual(values =c('blue')) +
+  labs(x = 'Event Date',
+       y = 'Count')
