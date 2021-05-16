@@ -280,7 +280,6 @@ count2 <- acled %>%
   # count the number of observations in each of those year-month bins. if you
   # want to summarise the data some other way, use 'summarise' here instead.
   count()
-
 count1 <- acled %>%
   filter(fatalities>0) %>%
   # use 'as.yearmon' to create a variable identifying the unique year-month
