@@ -486,6 +486,19 @@ Column {data-width=400, style="height:35pc;"}
 ```{r}
 library(zoo)
 
+shinyApp(
+  
+  ui = fluidPage(theme = shinytheme("cerulean"),
+    plotlyOutput("page2chartB")
+  ),
+  
+  
+  
+  server = function(input, output) {
+    
+    output$page2chartB <- renderPlotly({
+
+
 deaths_month <- acled %>%
   filter(fatalities>0) %>% 
   # use 'as.yearmon' to create a variable identifying the unique year-month
@@ -503,6 +516,9 @@ deaths_month <- acled %>%
   labs(x = "Month", y = "Number of Deaths", title = "Number of Total Deaths by Month") + 
   theme(axis.text.x = element_text(angle = 45, hjust = 1, vjust = 0.5))
 ggplotly(deaths_month, tooltip = c("n"))
+    })
+  }
+)
 ```
 
 #### Key Trends
