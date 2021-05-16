@@ -274,7 +274,7 @@ deaths_by_month <-
   ggplot(death_count, aes(x = yearmon, y = n)) + geom_col() +
   labs(x = "Month", y = "Number of Deaths", title = "Number of Total Deaths by Month") + 
   theme(axis.text.x = element_text(angle = 45, hjust = 1, vjust = 0.5))
-ggplotly(deaths_by_month, tooltip = c("n"))
+ggplotly(deaths_by_month, tooltip = c("PctTot"))
     })
   }
 )
