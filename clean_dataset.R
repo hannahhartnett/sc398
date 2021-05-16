@@ -270,3 +270,30 @@ for(i in 1:nrow(acled)) {
 acled$actorgroups <- paste(acled$assoc_actor_label1, "and", acled$assoc_actor_label2)
 
 write.csv(acled, 'acled.csv')
+
+library(zoo)
+
+count2 <- acled %>%
+  mutate(yearmon = as.yearmon(event_date)) %>%
+  # use that variable to group the data
+  group_by(yearmon) %>%
+  # count the number of observations in each of those year-month bins. if you
+  # want to summarise the data some other way, use 'summarise' here instead.
+  count()
+
+count1 <- acled %>%
+  filter(fatalities>0) %>%
+  # use 'as.yearmon' to create a variable identifying the unique year-month
+  # combination in which each observation falls
+  mutate(yearmon = as.yearmon(event_date)) %>%
+  # use that variable to group the data
+  group_by(yearmon) %>%
+  # count the number of observations in each of those year-month bins. if you
+  # want to summarise the data some other way, use 'summarise' here instead.
+  count()
+# plot the resulting series with yearmon on the x-axis and using 'geom_col'
+# instead of 'geom_hist' to preserve the temporal ordering and avoid
+# having to specify stat = "identity"
+count1$PctTot <- (count1$n/count2$n)*100
+
+write.csv(count1, 'death_count.csv')
