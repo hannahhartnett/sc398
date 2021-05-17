@@ -316,12 +316,8 @@ server <- shinyServer(function(input, output) {
                  'Sole Perpetrator and Other'='#000075')
     ggplot(death_table %>% filter(n>input$min_n), aes(x=fatality, y=n, fill=groups))+
       geom_bar(position = plotType(input$pType), stat = "identity")+
-<<<<<<< HEAD
       scale_fill_manual(values=colorset)+
-      labs(x = "Fatality?", y = "Number of Incidents", fill = "Groups Involved")
-=======
       labs(x = "Fatality?", y = "Number of Incidents", fill = "Groups Involved") + plot_theme
->>>>>>> a76c7e7b64783cd7d9f883ce6ea398c5dca29a81
   })
 })
 shinyApp(ui, server, options = list(height = 500))
