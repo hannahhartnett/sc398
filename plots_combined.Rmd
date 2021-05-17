@@ -1,0 +1,80 @@
+---
+title: "United States Protest Events in 2020"
+output: 
+  flexdashboard::flex_dashboard:
+    orientation: columns
+    vertical_layout: scroll
+runtime: shiny
+---
+
+<style type="text/css">
+
+.chart-title {  /* chart_title  */
+   font-size: 30px;
+   font-family: Palatino;
+
+</style>
+
+Column {data-width=650, style="height:200pc;"}
+-----------------------------------------------------------------------
+
+```{r}
+library(flexdashboard)
+library(shiny)
+library(readr)
+library(dplyr)
+library(ggplot2)
+library(leaflet)
+library(plotly)
+library(shinythemes)
+shinythemes::themeSelector()
+acled <- read_csv('acled.csv')
+death_count <- read_csv('death_count.csv')
+
+plot_theme <-  theme_gray() + # White background, black and white theme
+  theme(axis.text = element_text(size = 10, color = "azure4"),
+        text = element_text(size = 10, face = "bold", color = "azure4", family = 'Palatino'))
+```
+
+
+```{r}
+shinyApp(
+
+  ui = fluidPage(theme = shinytheme("cerulean"),
+                 titlePanel("Protest Events During 2020"),
+                 sidebarLayout(
+                   sidebarPanel(
+                   selectInput("event", h3("Select an Event Type:"), 
+                       choices = levels(as.factor(acled$event_type)), selected = "Protests"),
+                   sliderInput("slider", "Dates:",
+                               min = as.Date("2020-01-01","%Y-%m-%d"),
+                               max = as.Date("2020-12-31","%Y-%m-%d"),
+                               value = c(as.Date("2020-04-01"), as.Date("2020-04-30")),
+                               timeFormat = "%Y-%m-%d")
+
+                 ),
+                 mainPanel(plotlyOutput("sub_eventPlot",
+                                        height = '250px'),
+                 leafletOutput("event_map")))
+  ),
+
+  server = function(input, output) {
+    output$event_map <- renderLeaflet({
+      leaflet(acled %>% filter(event_date <= input$slider[2] & event_date >= input$slider[1] & event_type == input$event)) %>%
+        setView(lng = -114.948, lat = 44.212, zoom = 3) %>%
+        addTiles() %>%
+        addCircles(lng = ~longitude, lat = ~latitude, label = ~lapply(lab, htmltools::HTML), popup = ~notes)
+      })
+
+      output$sub_eventPlot <- renderPlotly({
+        ggplotly(ggplot(acled %>% filter(event_type == input$event), aes(x = sub_event_type)) + geom_bar() +
+                   labs(x = 'Sub Event Type',
+                        y = 'Count',
+                        title = 'Count of Sub-Event Type'),
+                 tooltip = 'y')})
+    },
+
+    options = list(height = 750)
+    )
+```
+
