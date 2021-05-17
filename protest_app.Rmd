@@ -4,6 +4,7 @@ output:
   flexdashboard::flex_dashboard:
     orientation: columns
     vertical_layout: scroll
+    theme: journal
 runtime: shiny
 ---
 
@@ -24,7 +25,6 @@ library(ggplot2)
 library(leaflet)
 library(plotly)
 library(shinythemes)
-shinythemes::themeSelector()
 acled <- read_csv('acled.csv')
 death_count <- read_csv('death_count.csv')
 
