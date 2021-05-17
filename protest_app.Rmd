@@ -7,6 +7,14 @@ output:
 runtime: shiny
 ---
 
+<style type="text/css">
+
+.chart-title {  /* chart_title  */
+   font-size: 30px;
+   font-family: Palatino;
+
+</style>
+
 ```{r}
 library(flexdashboard)
 library(shiny)
@@ -19,13 +27,17 @@ library(shinythemes)
 shinythemes::themeSelector()
 acled <- read_csv('acled.csv')
 death_count <- read_csv('death_count.csv')
+
+plot_theme <-  theme_gray() + # White background, black and white theme
+  theme(axis.text = element_text(size = 10, color = "azure4"),
+        text = element_text(size = 10, face = "bold", color = "azure4", family = 'Palatino'))
 ```
 
 
 Event Type and Location
 ================================
 
-Column {data-width=600, style="height:200pc;"}
+Column {data-width=650, style="height:200pc;"}
 -----------------------------------------------------------------------
 
 
@@ -38,8 +50,10 @@ In the year of the 'new normal,' we have experienced many momentous and novel ev
 shinyApp(
   
   ui = fluidPage(theme = shinytheme("cerulean"),
-    titlePanel("Protest Events During 2020"),
-    inputPanel(
+  tags$head(
+    tags$style("label{font-family: Palatino;}")
+  ),
+  inputPanel(
       sliderInput("slider", "Dates:",
                   min = as.Date("2020-01-01","%Y-%m-%d"), 
                   max = as.Date("2020-12-31","%Y-%m-%d"), 
@@ -57,7 +71,6 @@ shinyApp(
   addTiles() %>%
   addCircles(lng = ~longitude, lat = ~latitude, label = ~lapply(lab, htmltools::HTML), popup = ~notes)
       
-      
     })
   },
   
@@ -67,7 +80,7 @@ shinyApp(
 
 This map is capable of displaying all protest events that occurred in the United States over the course of 2020. Each point represents one day that the event was occurring. The map displays dates, type of event, and location if a point is hovered over, as well as key notes on the event if a point is clicked on. The slider can change the timeframe that the plot displays, and choosing the Sub-Event Type in the plot to the right will also filter this map accordingly.
 
-Column {data-width=400}
+Column {data-width=350}
 -----------------------------------------------------------------------
 
 ### Sub-Event Types
@@ -76,13 +89,16 @@ Column {data-width=400}
 # drill down sub event type
 ui <- shinyUI(
   fluidPage(theme = shinytheme("cerulean"),
+  tags$head(
+    tags$style("label{font-family: Palatino;}")
+    ),
     sidebarLayout(
       sidebarPanel(
         uiOutput("eventInput")
       ),
       mainPanel(
         plotlyOutput("sub_eventPlot", 
-                   height = '250px')
+                   height = '350px')
       )
     )
   ))
@@ -99,11 +115,13 @@ server <- shinyServer(function(input, output) {
       labs(x = 'Sub Event Type',
            y = 'Count', 
            title = 'Count of Sub-Event Type') +
-  scale_color_manual(values='blue'), 
+        plot_theme +
+  scale_color_manual(values='blue')  +
+      theme(axis.text.x = element_text(angle = 35, hjust = 1, vjust = 0.5, size = 5)), 
       tooltip = 'y')
   })
   })
-shinyApp(ui = ui, server = server, options = list(height = 350))
+shinyApp(ui = ui, server = server, options = list(height = 450))
 ```
 
 There were a wide variety of different protest events in the US in 2020; the vast majority were peaceful protests, but we also see a large number of protests with intervention and violent demonstrations.
@@ -140,7 +158,7 @@ server <- shinyServer(function(input, output) {
     ggplot(acled_time %>% filter(admin1 == input$state), aes(x = event_date, y = count)) + geom_line() +
       labs(x = 'Event Date',
            y = 'Count', 
-           title = 'Total Number of Protest Events per Day, by State')
+           title = 'Total Number of Protest Events per Day, by State') +plot_theme
   })
 })
 shinyApp(ui = ui, server = server, options = list(height = 350))
@@ -170,7 +188,8 @@ ui <- shinyUI(
          checkboxGroupInput("actor", "Choose Actors", choices = actorList, selected = c("AltRight", "Democrats", "Leftist", "Progressive", "Republicans"))
       ),
       mainPanel(
-        plotOutput("actorPlot")
+        plotOutput("actorPlot", 
+                   height = '450px')
       )
     )
   ))
@@ -184,13 +203,15 @@ server <- shinyServer(function(input, output) {
   # })
   output$actorPlot <- renderPlot({
     ggplot(acled %>% filter(assoc_actor_label1 == c(input$actor)), aes(x = assoc_actor_label1, fill = assoc_actor_label1)) + geom_bar() +
+      theme(legend.title = element_text(size = 14),
+  legend.text = element_text(size = 10)) +
       labs(x = 'Actor Groups',
            y = 'Count', 
            fill = 'Actor Groups',
-           title = 'Total Number of Events Participated in by Actor Groups')
+           title = 'Total Number of Events Participated in by Actor Groups') + plot_theme
   })
 })
-shinyApp(ui = ui, server = server)
+shinyApp(ui = ui, server = server, options = list(height = 600))
 ```
 
 ### Actor and Sub Event Type Charts
@@ -205,7 +226,8 @@ ui <- shinyUI(
         uiOutput("actorInput2")
       ),
       mainPanel(
-        plotlyOutput("actorPlot2")
+        plotlyOutput("actorPlot2", 
+                   height = '350px')
       )
     )
   ))
@@ -227,7 +249,7 @@ server <- shinyServer(function(input, output) {
       labs(x = 'Sub Event Type',
            y = 'Count', 
            title = 'Count of Sub-Event Types by Actors') +
-      theme(axis.text.x = element_text(angle = 35, hjust = 1, vjust = 0.5))
+      theme(axis.text.x = element_text(angle = 35, hjust = 1, vjust = 0.5)) + plot_theme
       
     ggplotly(p3, tooltip = "y")
     
@@ -287,10 +309,10 @@ server <- shinyServer(function(input, output) {
   output$incident_plot <- renderPlot({
     ggplot(death_table %>% filter(n>input$min_n), aes(x=fatality, y=n, fill=groups))+
       geom_bar(position = plotType(input$pType), stat = "identity")+
-      labs(x = "Fatality?", y = "Number of Incidents", fill = "Groups Involved")
+      labs(x = "Fatality?", y = "Number of Incidents", fill = "Groups Involved") + plot_theme
   })
 })
-shinyApp(ui, server)
+shinyApp(ui, server, options = list(height = 500))
 ```
 
 #### Key Trends
@@ -318,10 +340,11 @@ shinyApp(
 deaths_by_month <- 
   ggplot(death_count, aes(x = yearmon, y = n)) + geom_col() +
   labs(x = "Month", y = "Number of Deaths", title = "Number of Total Deaths by Month") + 
-  theme(axis.text.x = element_text(angle = 45, hjust = 1, vjust = 0.5))
+  theme(axis.text.x = element_text(angle = 45, hjust = 1, vjust = 0.5)) + plot_theme
 ggplotly(deaths_by_month, tooltip = c("PctTot"))
     })
-  }
+  }, 
+    options = list(height = 479)
 )
 ```
 
