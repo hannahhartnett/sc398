@@ -115,10 +115,19 @@ shinyApp(
 
   server = function(input, output) {
     output$event_map <- renderLeaflet({
-      leaflet(acled %>% filter(event_date <= input$slider[2] & event_date >= input$slider[1] & event_type == input$event)) %>%
-        setView(lng = -114.948, lat = 44.212, zoom = 3) %>%
-        addTiles() %>%
-        addCircles(lng = ~longitude, lat = ~latitude, label = ~lapply(lab, htmltools::HTML), popup = ~notes)
+      
+      filtered_data <- acled %>% filter(event_date <= input$slider[2] & event_date >= as.Date("2020-04-01") & event_type == input$event)
+      
+      if (nrow(filtered_data != 0)) {
+        leaflet(acled %>% filter(event_date <= input$slider[2] & event_date >= input$slider[1] & event_type == input$event)) %>%
+          setView(lng = -114.948, lat = 44.212, zoom = 3) %>%
+          addTiles() %>%
+          addCircles(lng = ~longitude, lat = ~latitude, label = ~lapply(lab, htmltools::HTML), popup = ~notes)
+      } else {
+        leaflet(acled %>% filter(event_date <= input$slider[2] & event_date >= input$slider[1] & event_type == input$event)) %>%
+          setView(lng = -114.948, lat = 44.212, zoom = 3) %>%
+          addTiles()
+      }
       })
 
       output$sub_eventPlot <- renderPlotly({
@@ -129,7 +138,7 @@ shinyApp(
                  tooltip = 'y')})
     },
 
-    options = list(height = 1000)
+    options = list(height = 725)
     )
 ```
 
@@ -289,7 +298,7 @@ server <- shinyServer(function(input, output) {
       labs(x = "Fatality?", y = "Number of Incidents", fill = "Groups Involved") + plot_theme
   })
 })
-shinyApp(ui, server, options = list(height = 725))
+shinyApp(ui, server, options = list(height = 500))
 ```
 
 #### Key Trends
