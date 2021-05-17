@@ -1,0 +1,16 @@
+---
+title: "United States Protest Events in 2020"
+author: "Hannah Hartnett, Cam Garfield, Frank Driscoll, Cole Guerin"
+date: "5/17/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+Link: 
+
+|           In the year of the 'new normal,' we have experienced many momentous and novel events: a global pandemic; increased awareness of national racial injustices, specifically on the part of the police force, as a result of the murders of countless Black Americans; and a contentious presidential election. This interactive app is intended as an accompaniment to year-end news summaries, to aid investigation of protest events as a response to these significant new phenomena. How have Americans gathered to react to national events in 2020? The app was created using data from the Armed Conflict Location and Event Data Project: https://github.com/hannahhartnett/sc398/blob/main/US-ACLED.csv. This data set includes 23238 observations from the 2020 year with 31 variables, as well as 9 more variables we have formed from the existing data to aid in displaying the data effectively. Each of these observations is of a day that an event took place, so a single event can be represented by multiple observations if the event spanned multiple days. The data set includes variables such as the date and locations of the events, the main actors in the events, the type of the event, the number of event fatalities, and general notes and takeaways from the event.
+
+|           When opening the app, there are four tabs that have plots and text that are visible to help you navigate the app. The first tab of the app contains a map
