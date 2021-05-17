@@ -109,7 +109,7 @@ shinyApp(
 
                  ),
                  mainPanel(plotlyOutput("sub_eventPlot",
-                                        height = '265px'),
+                                        height = '292px'),
                  leafletOutput("event_map")))
   ),
 
