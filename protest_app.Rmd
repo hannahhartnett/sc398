@@ -212,12 +212,13 @@ server <- shinyServer(function(input, output) {
 
   output$actorPlot2 <- renderPlotly({
     p3 <- ggplot(acled %>% filter(assoc_actor_label1 == input$actor2), 
-      aes(x = sub_event_type)) + 
+      aes(x = sub_event_type))+
+      plot_theme+
       geom_bar() +
       labs(x = 'Sub Event Type',
            y = 'Count', 
            title = 'Count of Sub-Event Types by Actors') +
-      theme(axis.text.x = element_text(angle = 35, hjust = 1, vjust = 0.5)) + plot_theme
+      theme(axis.text.x = element_text(angle = 35, hjust = 1, vjust = 0.5))
       
     ggplotly(p3, tooltip = "y")
     
