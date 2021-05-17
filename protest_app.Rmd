@@ -7,6 +7,14 @@ output:
 runtime: shiny
 ---
 
+<style type="text/css">
+
+.chart-title {  /* chart_title  */
+   font-size: 30px;
+   font-family: Palatino;
+
+</style>
+
 ```{r}
 library(flexdashboard)
 library(shiny)
@@ -19,27 +27,33 @@ library(shinythemes)
 shinythemes::themeSelector()
 acled <- read_csv('acled.csv')
 death_count <- read_csv('death_count.csv')
+
+plot_theme <-  theme_gray() + # White background, black and white theme
+  theme(axis.text = element_text(size = 10, color = "azure4"),
+        text = element_text(size = 10, face = "bold", color = "azure4", family = 'Palatino'))
 ```
 
 
 Event Type and Location
 ================================
 
-Column {data-width=600, style="height:200pc;"}
+Column {data-width=650, style="height:200pc;"}
 -----------------------------------------------------------------------
 
 
 In the year of the 'new normal,' we have experienced many momentous and novel events: a global pandemic; increased awareness of national racial injustices, specifically on the part of the police force, as a result of the murders of countless Black Americans; and a contentious presidential election. This interactive app is intended as an accompaniment to year-end news summaries, to aid investigation of protest events as a response to these significant new phenomena. How have Americans gathered to react to national events in 2020? The app was created using data from the Armed Conflict Location and Event Data Project: https://github.com/hannahhartnett/sc398/blob/main/US-ACLED.csv. 
 
 
-### Chart A
+### Event Locations
 
 ```{r}
 shinyApp(
   
   ui = fluidPage(theme = shinytheme("cerulean"),
-    titlePanel("Protest Events During 2020"),
-    inputPanel(
+  tags$head(
+    tags$style("label{font-family: Palatino;}")
+  ),
+  inputPanel(
       sliderInput("slider", "Dates:",
                   min = as.Date("2020-01-01","%Y-%m-%d"), 
                   max = as.Date("2020-12-31","%Y-%m-%d"), 
@@ -57,7 +71,6 @@ shinyApp(
   addTiles() %>%
   addCircles(lng = ~longitude, lat = ~latitude, label = ~lapply(lab, htmltools::HTML), popup = ~notes)
       
-      
     })
   },
   
@@ -65,25 +78,27 @@ shinyApp(
 )
 ```
 
-This map is capable of displaying all protest events that occurred in the United States over the course of 2020. Each point represents one day that the event was occurring. The map displays dates, type of event, and location if a point is hovered over, as well as key notes on the event if a point is clicked on. The slider can change the timeframe that the plot displays, and choosing the Sub-Event Type in the plot to the right will also filter this map accordingly.
+This map displays all protest events that occurred in the United States over the course of 2020. Each point represents one day on which the event occurred. Hovering over a point shows the date, type of event, and location, and clicking on a point displays notes about what took place. The slider changes the timeframe that the plot displays, and choosing the Sub-Event Type in the plot to the right will also filter this map accordingly.
 
-Column {data-width=400}
+Column {data-width=350}
 -----------------------------------------------------------------------
 
-### Chart B
+### Sub-Event Types
 
 ```{r}
 # drill down sub event type
 ui <- shinyUI(
   fluidPage(theme = shinytheme("cerulean"),
-    titlePanel("Event Sub-Types"),
+  tags$head(
+    tags$style("label{font-family: Palatino;}")
+    ),
     sidebarLayout(
       sidebarPanel(
         uiOutput("eventInput")
       ),
       mainPanel(
         plotlyOutput("sub_eventPlot", 
-                   height = '250px')
+                   height = '350px')
       )
     )
   ))
@@ -99,17 +114,20 @@ server <- shinyServer(function(input, output) {
     ggplotly(ggplot(acled %>% filter(event_type == input$event), aes(x = sub_event_type)) + geom_bar() +
       labs(x = 'Sub Event Type',
            y = 'Count', 
-           title = 'Count of Sub-Event Type'), 
+           title = 'Count of Sub-Event Type') +
+        plot_theme +
+  scale_color_manual(values='blue')  +
+      theme(axis.text.x = element_text(angle = 35, hjust = 1, vjust = 0.5, size = 5)), 
       tooltip = 'y')
   })
   })
-shinyApp(ui = ui, server = server, options = list(height = 350))
+shinyApp(ui = ui, server = server, options = list(height = 450))
 ```
 
 There were a wide variety of different protest events in the US in 2020; the vast majority were peaceful protests, but we also see a large number of protests with intervention and violent demonstrations.
 
 
-### Chart C
+### Events by State
 
 ```{r}
 library(lubridate)
@@ -118,7 +136,6 @@ acled_time <- acled %>% group_by(admin1, event_date) %>% summarize(count = n())
 library(shiny)
 ui <- shinyUI(
   fluidPage(theme = shinytheme("cerulean"),
-    titlePanel("State"),
     sidebarLayout(
       sidebarPanel(
         uiOutput("stateInput")
@@ -141,7 +158,7 @@ server <- shinyServer(function(input, output) {
     ggplot(acled_time %>% filter(admin1 == input$state), aes(x = event_date, y = count)) + geom_line() +
       labs(x = 'Event Date',
            y = 'Count', 
-           title = 'Total Number of Protest Events per Day, by State')
+           title = 'Total Number of Protest Events per Day, by State') +plot_theme
   })
 })
 shinyApp(ui = ui, server = server, options = list(height = 350))
@@ -171,7 +188,8 @@ ui <- shinyUI(
          checkboxGroupInput("actor", "Choose Actors", choices = actorList, selected = c("AltRight", "Democrats", "Leftist", "Progressive", "Republicans"))
       ),
       mainPanel(
-        plotOutput("actorPlot")
+        plotOutput("actorPlot", 
+                   height = '450px')
       )
     )
   ))
@@ -184,13 +202,16 @@ server <- shinyServer(function(input, output) {
   #   )
   # })
   output$actorPlot <- renderPlot({
-    ggplot(acled %>% filter(assoc_actor_label1 == c(input$actor)), aes(x = assoc_actor_label1)) + geom_bar() +
+    ggplot(acled %>% filter(assoc_actor_label1 == c(input$actor)), aes(x = assoc_actor_label1, fill = assoc_actor_label1)) + geom_bar() +
+      theme(legend.title = element_text(size = 14),
+  legend.text = element_text(size = 10)) +
       labs(x = 'Actor Groups',
-           y = 'Count',
-           title = 'Total Number of Events Participated in by Actor Groups')
+           y = 'Count', 
+           fill = 'Actor Groups',
+           title = 'Total Number of Events Participated in by Actor Groups') + plot_theme
   })
 })
-shinyApp(ui = ui, server = server)
+shinyApp(ui = ui, server = server, options = list(height = 600))
 ```
 
 ### Actor and Sub Event Type Charts
@@ -205,7 +226,8 @@ ui <- shinyUI(
         uiOutput("actorInput2")
       ),
       mainPanel(
-        plotlyOutput("actorPlot2")
+        plotlyOutput("actorPlot2", 
+                   height = '350px')
       )
     )
   ))
@@ -227,7 +249,7 @@ server <- shinyServer(function(input, output) {
       labs(x = 'Sub Event Type',
            y = 'Count', 
            title = 'Count of Sub-Event Types by Actors') +
-      theme(axis.text.x = element_text(angle = 35, hjust = 1, vjust = 0.5))
+      theme(axis.text.x = element_text(angle = 35, hjust = 1, vjust = 0.5)) + plot_theme
       
     ggplotly(p3, tooltip = "y")
     
@@ -240,8 +262,7 @@ shinyApp(ui = ui, server = server)
 
 #### Key Trends
   - Black Lives Matter and other groups protesting for the end of racist institutions, policies, etc. were by far the most active group in 2020
-  - Many other groups were also active and it would be interesting for a study to be done on a historical basis comparing their activity over time
-  - By and large most groups were engaging in peaceful protest events although many groups did face suppression, intervention and active force against their activities 
+  - Many other groups were also active; this shows great potential for a study to be done comparing actor activity over time
   
 #### Information About Data
   Actor groups are categorized by affliation. So, BLM protestors, African American designated groups, the ACLU, and NAACP are all incorporated under the tag "BLM-Related". Migrant Rights includes ABOLISH ICE protestors, DREAMers, Refugees, La Resistancia, and other migrant identified groups. Similarly, politically affiliated groups included Republican identified groups and Democrat identified groups. We also categorized a few other politically based groups such as Progressive organizations like the MoveOn movement, the Indivisible Movement, the Sunrise Movement and Democratic Socialists for America as well as more leftist operating groups such as Communists, Socialists, ANTIFA and other anti-fascist identified groups. Similarly, groups such as the Boogaloo Boys, Proud Boys, Tea Party, White Nationalists, QAnon, and Patriot Party groups were all lumped together under the tag AltRight. The remaining tags were all generated by the keywords implied in their names, with those that remained grouped together as "Other".
@@ -255,7 +276,7 @@ Fatalities
 Column {data-width=650, style="height:1000pc;"}
 -----------------------------------------------------------------------
 
-### Chart A
+### Fatalities by Actor
 
 ```{r}
 tab1 <- select(acled, groups, fatality)
@@ -295,21 +316,25 @@ server <- shinyServer(function(input, output) {
                  'Sole Perpetrator and Other'='#000075')
     ggplot(death_table %>% filter(n>input$min_n), aes(x=fatality, y=n, fill=groups))+
       geom_bar(position = plotType(input$pType), stat = "identity")+
+<<<<<<< HEAD
       scale_fill_manual(values=colorset)+
       labs(x = "Fatality?", y = "Number of Incidents", fill = "Groups Involved")
+=======
+      labs(x = "Fatality?", y = "Number of Incidents", fill = "Groups Involved") + plot_theme
+>>>>>>> a76c7e7b64783cd7d9f883ce6ea398c5dca29a81
   })
 })
-shinyApp(ui, server)
+shinyApp(ui, server, options = list(height = 500))
 ```
 
 #### Key Trends
 - Incidents with no fatalities vastly outnumber incidents with fatalities, as can be seen by the count figure.
-- The vast majority of non-fatality incidents involve only protests, while the vast majority of incidents with a fatality involved Police officers.
+- The vast majority of non-fatality incidents involve only protestors, while the vast majority of incidents with a fatality involved Police officers.
 
 Column {data-width=400, style="height:35pc;"}
 -----------------------------------------------------------------------
 
-### Chart B
+### Total Fatalities
 
 
 ```{r}
@@ -327,12 +352,11 @@ shinyApp(
 deaths_by_month <- 
   ggplot(death_count, aes(x = yearmon, y = n)) + geom_col() +
   labs(x = "Month", y = "Number of Deaths", title = "Number of Total Deaths by Month") + 
-  theme(axis.text.x = element_text(angle = 45, hjust = 1, vjust = 0.5))
-deaths_by_month <- deaths_by_month + aes(text = paste0("</br> Number of Incidents with Fatalities: ", n,
-                                                      "</br> Percent of Total Incidents: ", round(PctTot,2)))
-ggplotly(deaths_by_month, tooltip = "text")
+  theme(axis.text.x = element_text(angle = 45, hjust = 1, vjust = 0.5)) + plot_theme
+ggplotly(deaths_by_month, tooltip = c("PctTot"))
     })
-  }
+  }, 
+    options = list(height = 479)
 )
 ```
 
@@ -347,7 +371,7 @@ Black Lives Matter Protests
 Column {data-width=650, style="height:200pc;"}
 -----------------------------------------------------------------------
 
-### Chart A
+### Black Lives Matter Protests
 
 ```{r}
 shinyApp(
@@ -418,5 +442,5 @@ if (input$time == "Before George Floyd's Death") {
 )
 ```
 
-This map has many of the same dynamic options as our opening map, with the exeption of of the timeframe is selected. This map shows how the Black Lives Matter Movement has grown tremendously in the United States over the course of 2020. Based on the timeframes, changes in frequency of protests associating with BLM are easily visible. After George Floyd's death, the amount of BLM protests really spiked and continued into June. As time wore on for the rest of the year, the amount of protests did gradually drop, but continued to be way more frequent than in the first five months of 2020. The protests associated with George Floyd's death raised awarness and allowed more people to join the cause and protest other instances of violence against black lives. Youc an see in the later months of 2020 that all of the points are not directly referencing George Floyd in the notes, and instead are focused on other American citizens and their stories.
+This map has many of the same dynamic options as our opening map, with the exeption that the timeframe is pre-selected. The Black Lives Matter Movement has grown tremendously in the United States over the course of 2020. Based on the timeframes, changes in frequency of protests associated with BLM are easily visible. After George Floyd's death, the number of BLM protests sees a dramatic spike and this continues into June. As time wears on for the rest of the year, the amount of protests gradually drops, but the protest events are still much more frequent than in the first five months of 2020. The protests associated with George Floyd's death raised awarness and allowed more people to join the cause and protest against other instances of violence against black lives. In the later months of 2020 not all points are directly reference George Floyd in the notes, and instead focus on other American citizens and their stories.
 
