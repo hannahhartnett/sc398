@@ -132,6 +132,7 @@ shinyApp(
 
       output$sub_eventPlot <- renderPlotly({
         ggplotly(ggplot(acled %>% filter(event_type == input$event), aes(x = sub_event_type)) + geom_bar() +
+                   scale_fill_manual(values =c('blue')) +
                    labs(x = 'Sub Event Type',
                         y = 'Count',
                         title = 'Count of Sub-Event Type'),
