@@ -61,7 +61,7 @@ shinyApp(
   server = function(input, output) {
     output$event_map <- renderLeaflet({
       
-      filtered_data <- acled %>% filter(event_date <= input$slider[2] & event_date >= as.Date("2020-04-01") & event_type == input$event)
+      filtered_data <- acled %>% filter(event_date <= input$slider[2] & event_date >= input$slider[1] & event_type == input$event)
       
       if (nrow(filtered_data != 0)) {
         leaflet(acled %>% filter(event_date <= input$slider[2] & event_date >= input$slider[1] & event_type == input$event)) %>%
