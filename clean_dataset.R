@@ -63,12 +63,12 @@ acled$fatality <- ifelse(acled$fatalities>0, "Yes", "No")
 acled$groups <- paste(acled$actor_label1, "and", acled$actor_label2)
 
 # cleaning the group interaction variable
-acled$groups[acled$groups == "Other and NA"] <- "Other"
+acled$groups[acled$groups == "Other and None"] <- "Other"
 acled$groups[acled$groups == "Other and Other"] <- "Other"
-acled$groups[acled$groups == "Rioters and NA"] <- "Rioters"
-acled$groups[acled$groups == "Protesters and NA"] <- "Protesters"
-acled$groups[acled$groups == "Sole Perpetrator and NA"] <- "Sole Perpetrator"
-acled$groups[acled$groups == "Police and NA"] <- "Police"
+acled$groups[acled$groups == "Rioters and None"] <- "Rioters"
+acled$groups[acled$groups == "Protesters and None"] <- "Protesters"
+acled$groups[acled$groups == "Sole Perpetrator and None"] <- "Sole Perpetrator"
+acled$groups[acled$groups == "Police and None"] <- "Police"
 acled$groups[acled$groups == "Protesters and Protesters"] <- "Protesters"
 acled$groups[acled$groups == "Police and Rioters"] <- "Rioters and Police"
 acled$groups[acled$groups == "Sole Perpetrator and Protesters"] <- "Protesters and Sole Perpetrator"
