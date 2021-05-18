@@ -275,6 +275,13 @@ tab1 <- select(acled, groups, fatality)
 death_table <- tab1 %>% 
   group_by(groups) %>%
   count(fatality)
+colorset = c('Other'='#e6194B','Police'='#ffe119','Police and Other'='#469990',
+                 'Police and Sole Perpetrator'='#4363d8','Protesters'='#800000',
+                 'Protesters and Other'='#911eb4','Protesters and Police'='#42d4f4',
+                 'Protesters and Rioters'='#bfef45','Protesters and Sole Perpetrator'='#fabed4',
+                 'Rioters'='#3cb44b','Rioters and Other'='#dcbeff','Rioters and Police'='#aaffc3',
+                 'Rioters and Sole Perpetrator'='#f58231','Sole Perpetrator'='#808000',
+                 'Sole Perpetrator and Other'='#000075')
 plotType <- function(input) {
   switch(input,
          Count = "stack",
@@ -290,26 +297,21 @@ ui <- shinyUI(
                  list("Count", "Proportional"))
       ),
       mainPanel(
-        plotOutput("incident_plot")
+        plotlyOutput("incident_plot")
       )
     )
   ))
   
   
 server <- shinyServer(function(input, output) {
-  output$incident_plot <- renderPlot({
-    colorset = c('Other'='#e6194B','Police'='#ffe119','Police and Other'='#469990',
-                 'Police and Sole Perpetrator'='#4363d8','Protesters'='#800000',
-                 'Protesters and Other'='#911eb4','Protesters and Police'='#42d4f4',
-                 'Protesters and Rioters'='#bfef45','Protesters and Sole Perpetrator'='#fabed4',
-                 'Rioters'='#3cb44b','Rioters and Other'='#dcbeff','Rioters and Police'='#aaffc3',
-                 'Rioters and Sole Perpetrator'='#f58231','Sole Perpetrator'='#808000',
-                 'Sole Perpetrator and Other'='#000075')
-    ggplot(death_table %>% filter(n>input$min_n), aes(x=fatality, y=n, fill=groups))+
+  output$incident_plot <- renderPlotly({
+    by_group <- ggplot(death_table %>% filter(n>input$min_n), aes(x=fatality, y=n, fill=groups))+
       geom_bar(position = plotType(input$pType), stat = "identity")+
       scale_fill_manual(values=colorset)+
       labs(x = "Fatality?", y = "Number of Incidents", fill = "Groups Involved", 
            title = 'Incidents Without Fatalities Vastly Outnumber Those With Fatalities') + plot_theme
+    by_group <- by_group + aes(text = paste0("</br> Number of Incidents: ", n))
+    ggplotly(by_group, tooltip = "text")
   })
 })
 shinyApp(ui, server, options = list(height = 400))
