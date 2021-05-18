@@ -295,8 +295,4 @@ count1 <- acled %>%
 # having to specify stat = "identity"
 count1$PctTot <- (count1$n/count2$n)*100
 
-count1$yearmon <- factor(c("Jan 2020", "Feb 2020", "Mar 2020", "Apr 2020", "May 2020",
-                           "Jun 2020", "Jul 2020", "Aug 2020", "Sep 2020", "Oct 2020",
-                           "Nov 2020", "Dec 2020"))
-
 write.csv(count1, 'death_count.csv')
