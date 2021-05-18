@@ -12,7 +12,7 @@ runtime: shiny
 
 .chart-title {  /* chart_title  */
    font-size: 30px;
-   font-family: Palatino;
+   font-family: News Cycle;
 
 </style>
 
@@ -30,7 +30,7 @@ death_count <- read_csv('death_count.csv')
 
 plot_theme <-  theme_gray() + # White background, black and white theme
   theme(axis.text = element_text(size = 10, color = "azure4"),
-        text = element_text(size = 10, face = "bold", color = "azure4", family = 'Palatino'))
+        text = element_text(size = 10, face = "bold", color = "azure4", family = 'News Cycle'))
 ```
 
 
@@ -131,7 +131,7 @@ shinyApp(
       })
 
       output$sub_eventPlot <- renderPlotly({
-        ggplotly(ggplot(acled %>% filter(event_type == input$event), aes(x = sub_event_type)) + geom_bar() +
+        ggplotly(ggplot(acled %>% filter(event_type == input$event & (event_date <= input$slider[2] & event_date >= input$slider[1])), aes(x = sub_event_type)) + geom_bar() +
                    scale_fill_manual(values =c('blue')) +
                    labs(x = 'Sub Event Type',
                         y = 'Count',
