@@ -25,12 +25,19 @@ library(ggplot2)
 library(leaflet)
 library(plotly)
 library(shinythemes)
+library(sysfonts)
+library(showtext)
+
 acled <- read_csv('acled.csv')
 death_count <- read_csv('death_count.csv')
 
+
+font_add_google('News Cycle', 'news_cycle')
+showtext_auto()
+
 plot_theme <-  theme_gray() + # White background, black and white theme
   theme(axis.text = element_text(size = 10, color = "azure4"),
-        text = element_text(size = 10, face = "bold", color = "azure4", family = 'News Cycle'))
+        text = element_text(size = 10, face = "bold", color = "azure4", family = 'news_cycle'))
 ```
 
 
