@@ -49,7 +49,7 @@ Event Type and Location
 Column {data-width=350}
 -----------------------------------------------------------------------
 
-In the year of the 'new normal,' we have experienced many momentous and novel events: a global pandemic; increased awareness of national racial injustices, specifically on the part of the police force, as a result of the murders of countless Black Americans; and a contentious presidential election. This interactive app is intended as an accompaniment to year-end news summaries, to aid investigation of protest events as a response to these significant new phenomena. How have Americans gathered to react to national events in 2020? The app was created using data from the Armed Conflict Location and Event Data Project: https://acleddata.com/curated-data-files/. This data contains information on both armed conflicts and protest events, so peaceful protests are also included.
+In the year of the 'new normal,' we have experienced many momentous and novel events: a global pandemic; increased awareness of national racial injustices, specifically on the part of the police force, as a result of the murders of countless Black Americans; and a contentious presidential election. This interactive app is intended as an accompaniment to year-end news summaries, to aid investigation of protest events as a response to these significant new phenomena. How have Americans gathered to react to national events in 2020? The app was created using data from the Armed Conflict Location and Event Data Project: https://acleddata.com/curated-data-files/. This data contains information on both armed conflicts and peaceful protest events.
 
 ### Events by State
 
@@ -82,7 +82,11 @@ server <- shinyServer(function(input, output) {
     ggplot(acled_time %>% filter(admin1 == input$state), aes(x = event_date, y = count)) + geom_line() +
       labs(x = 'Event Date',
            y = 'Count', 
-           title = 'Total Number of Protest Events per Day, by State') +plot_theme
+           title = 'Total Number of Protest Events per Day, by State') +plot_theme +
+      geom_vline(xintercept = as.numeric(as.Date('2020-05-25')), color = 'red') +
+      geom_vline(xintercept = as.numeric(as.Date('2020-11-03')), color = 'red') +
+  geom_text(aes(x=as.Date('2020-05-25'), label="Death of \n George Floyd", y = max(count)), colour="red", angle=0, size = 2) +
+      geom_text(aes(x=as.Date('2020-11-03'), label="Presidential \n Election", y = max(count)), colour="red", angle=0, size = 2)
   })
 })
 shinyApp(ui = ui, server = server, options = list(height = 400))
@@ -90,7 +94,7 @@ shinyApp(ui = ui, server = server, options = list(height = 400))
 
 
 #### Key Trends
-- The number of protests per day peaks earlier in Minnesota and Georgia, the location of the murders of George Floyd and Ahmaud Arbery, respectively, than most other states. 
+- The number of protests per day peaks earlier in Minnesota, the location of the murder of George Floyd, than most other states. 
 - The overall number of protests in Washington D.C. is fewer than in most other states, but it is greatest in the fall, at the peak of the election season for the 2020 Presidential Election.
 
 
@@ -103,10 +107,10 @@ Column {data-width=650, style="height:200pc;"}
 shinyApp(
 
   ui = fluidPage(theme = shinytheme("cerulean"),
-                 titlePanel("Protest Events During 2020"),
                  sidebarLayout(
                    sidebarPanel(
-                   selectInput("event", h3("Select an Event Type:"), 
+                   selectInput("event",
+                               label = 'Select an Event Type:',
                        choices = levels(as.factor(acled$event_type)), selected = "Protests"),
                    sliderInput("slider", "Dates:",
                                min = as.Date("2020-01-01","%Y-%m-%d"),
@@ -117,7 +121,7 @@ shinyApp(
                  ),
                  mainPanel(plotlyOutput("sub_eventPlot",
                                         height = '292px'),
-                 leafletOutput("event_map")))
+                 leafletOutput("event_map", width = '100%')))
   ),
 
   server = function(input, output) {
@@ -129,8 +133,7 @@ shinyApp(
         leaflet(acled %>% filter(event_date <= input$slider[2] & event_date >= input$slider[1] & event_type == input$event)) %>%
           setView(lng = -114.948, lat = 44.212, zoom = 3) %>%
           addTiles() %>%
-          addCircles(lng = ~longitude, lat = ~latitude, label = ~lapply(lab, htmltools::HTML), popup = ~notes)
-      } else {
+          addCircles(lng = ~longitude, lat = ~latitude, label = ~lapply(lab, htmltools::HTML), popup = ~notes)} else {
         leaflet(acled %>% filter(event_date <= input$slider[2] & event_date >= input$slider[1] & event_type == input$event)) %>%
           setView(lng = -114.948, lat = 44.212, zoom = 3) %>%
           addTiles()
@@ -142,7 +145,8 @@ shinyApp(
                    scale_fill_manual(values =c('blue')) +
                    labs(x = 'Sub Event Type',
                         y = 'Count',
-                        title = 'Count of Sub-Event Type'),
+                        title = 'Count of Sub-Event Type') +
+                   plot_theme,
                  tooltip = 'y')})
     },
 
@@ -279,7 +283,6 @@ plotType <- function(input) {
 }
 ui <- shinyUI(
   fluidPage(theme = shinytheme("cerulean"),
-    titlePanel("Group"),
     sidebarLayout(
       sidebarPanel(
         sliderInput("min_n", label = "Minimum Number of Incidents by Group",
@@ -306,10 +309,11 @@ server <- shinyServer(function(input, output) {
     ggplot(death_table %>% filter(n>input$min_n), aes(x=fatality, y=n, fill=groups))+
       geom_bar(position = plotType(input$pType), stat = "identity")+
       scale_fill_manual(values=colorset)+
-      labs(x = "Fatality?", y = "Number of Incidents", fill = "Groups Involved") + plot_theme
+      labs(x = "Fatality?", y = "Number of Incidents", fill = "Groups Involved", 
+           title = 'Incidents Without Fatalities Vastly Outnumber Those With Fatalities') + plot_theme
   })
 })
-shinyApp(ui, server, options = list(height = 500))
+shinyApp(ui, server, options = list(height = 400))
 ```
 
 #### Key Trends
@@ -337,13 +341,15 @@ shinyApp(
 deaths_by_month <- 
   ggplot(death_count, aes(x = yearmon, y = n)) + geom_col() + plot_theme+
   labs(x = "Month", y = "Number of Deaths", title = "Number of Total Deaths by Month") + 
-  theme(axis.text.x = element_text(angle = 45, hjust = 1, vjust = 0.5))
+  theme(text = element_text(size = 10, face = "bold", color = "azure4", family = 'news_cycle'), 
+        axis.text.x = element_text(angle = 45, hjust = 1, vjust = 0.5))
+
 deaths_by_month <- deaths_by_month + aes(text = paste0("</br> Number of Incidents with Fatalities: ", n,
                                                       "</br> Percent of Total Incidents: ", 
                                                       paste(round(PctTot,2),"%")))
 ggplotly(deaths_by_month, tooltip = "text")
     })
-  }
+  }, options = list(height = 379)
 )
 ```
 
@@ -355,16 +361,15 @@ Black Lives Matter Protests
 ================================
 
 
-Column {data-width=650, style="height:200pc;"}
+Column {data-width=650, style="height:45pc;"}
 -----------------------------------------------------------------------
 
-### Black Lives Matter Protests
+### Growth of the Black Lives Matter Movement
 
 ```{r}
 shinyApp(
   
   ui = fluidPage(theme = shinytheme("cerulean"),
-    titlePanel("Growth of Black Lives Matter Movement"),
     sidebarLayout(
       sidebarPanel(
       radioButtons("time", label = "Time Frame:",
@@ -426,7 +431,7 @@ if (input$time == "Before George Floyd's Death") {
     })
   },
   
-  options = list(height = 500)
+  options = list(height = 430)
 )
 ```
 
