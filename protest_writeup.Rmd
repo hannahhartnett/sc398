@@ -1,0 +1,18 @@
+---
+title: "United States Protest Events in 2020"
+author: "Hannah Hartnett, Cam Garfield, Frank Driscoll, Cole Guerin"
+date: "5/17/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+Link: 
+
+|           In the year of the 'new normal,' we have experienced many momentous and novel events: a global pandemic; increased awareness of national racial injustices, specifically on the part of the police force, as a result of the murders of countless Black Americans; and a contentious presidential election. This interactive app is intended as an accompaniment to year-end news summaries, to aid investigation of protest events as a response to these significant new phenomena. How have Americans gathered to react to national events in 2020? The app was created using data from the Armed Conflict Location and Event Data Project: https://github.com/hannahhartnett/sc398/blob/main/US-ACLED.csv. This data set includes 23238 observations from the 2020 year with 31 variables, as well as 9 more variables we have formed from the existing data to aid in displaying the data effectively. Each of these observations is of a day that an event took place, so a single event can be represented by multiple observations if the event spanned multiple days. The data set includes variables such as the date and locations of the events, the main actors in the events, the type of the event, the number of event fatalities, and general notes and takeaways from the event.
+
+|           When opening the app, there are four tabs that have plots and text that are visible to help you navigate the app. The first tab of the app contains a map that displays all protest events that occurred in the United States over the course of 2020. Each point represents one day on which the event occurred. Hovering over a point shows the date, type of event, and location, and clicking on a point displays notes about what took place. The slider changes the time frame that the plot displays, and choosing the Sub-Event Type to the left will also filter this map accordingly.
+
+|           The final tab dives into the growth of the Black Lives Matter movement by utilizing another map. This map has many of the same dynamic options as our opening map, with the exception that the time frame is pre-selected. The Black Lives Matter Movement has grown tremendously in the United States over the course of 2020. Based on the time frames, changes in frequency of protests associated with BLM are easily visible. After George Floyd's death, the number of BLM protests sees a dramatic spike and this continues into June. As time wears on for the rest of the year, the amount of protests gradually drops, but the protest events are still much more frequent than in the first five months of 2020. The protests associated with George Floyd's death raised awarness and allowed more people to join the cause and protest against other instances of violence against black lives. In the later months of 2020 not all points are directly reference George Floyd in the notes, and instead focus on other American citizens and their stories.
