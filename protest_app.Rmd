@@ -155,7 +155,7 @@ shinyApp(
 ```
 
 #### Key Trends
-- There were a wide variety of different protest events in the US in 2020; the vast majority were peaceful protests, but we also see a large number of protests with intervention and violent demonstrations.
+- There were a wide variety of protest events in the US in 2020; the vast majority were peaceful protests, but we also see a large number of protests with intervention and violent demonstrations.
 
 #### How to Use the Map
 
@@ -169,15 +169,14 @@ Event Actors
 Column {data-width=650, style="height:1000pc;"}
 -----------------------------------------------------------------------
 
-### Actor Overall Event Chart
+### Involved Actors
 ```{r}
 actorList <- unique(acled$assoc_actor_label1)
 ui <- shinyUI(
   fluidPage(
-    titlePanel("Actor Groups"),
     sidebarLayout(
       sidebarPanel(
-         checkboxGroupInput("actor", "Choose Actors", choices = actorList, selected = c("AltRight", "Democrats", "Leftist", "Progressive", "Republicans"))
+         checkboxGroupInput("actor", "Choose Actor Groups:", choices = actorList, selected = c("AltRight", "Democrats", "Leftist", "Progressive", "Republicans", inline = TRUE))
       ),
       mainPanel(
         plotOutput("actorPlot", 
@@ -194,7 +193,7 @@ server <- shinyServer(function(input, output) {
   #   )
   # })
   output$actorPlot <- renderPlot({
-    ggplot(acled %>% filter(assoc_actor_label1 == c(input$actor)), aes(x = assoc_actor_label1, fill = assoc_actor_label1)) + geom_bar() +
+    ggplot(acled %>% filter(assoc_actor_label1 == c(input$actor)), aes(x = assoc_actor_label1)) + geom_bar() +
       theme(legend.title = element_text(size = 14),
   legend.text = element_text(size = 10)) +
       labs(x = 'Actor Groups',
