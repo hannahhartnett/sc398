@@ -327,7 +327,7 @@ shinyApp(ui, server, options = list(height = 400))
 
 #### Key Trends
 - Incidents with no fatalities vastly outnumber incidents with fatalities, as can be seen by the count figure.
-- The vast majority of non-fatality incidents involve only protestors, while the vast majority of incidents with a fatality involved Police officers.
+- As shown by the "minimum number of incidents involved" slider, many groups have only been involved in fatal events a small number of times. Increasing the slider highlights the involvement of Police in fatal events.
 
 Column {data-width=400, style="height:35pc;"}
 -----------------------------------------------------------------------
@@ -356,7 +356,7 @@ deaths_by_month <-
   theme(text = element_text(size = 10, face = "bold", color = "azure4", family = 'news_cycle'), 
         axis.text.x = element_text(angle = 45, hjust = 1, vjust = 0.5))
 
-deaths_by_month <- deaths_by_month + aes(text = paste0("</br> Number of Incidents with Fatalities: ", n,
+deaths_by_month <- deaths_by_month + aes(text = paste0("</br> Number of Fatalities: ", n,
                                                       "</br> Percent of Total Incidents: ", 
                                                       paste(round(PctTot,2),"%")))
 ggplotly(deaths_by_month, tooltip = "text")
@@ -367,7 +367,7 @@ ggplotly(deaths_by_month, tooltip = "text")
 
 #### Key Trends
 - Incidents involving a fatality peaked in the summer of 2020 with June being the month with the most fatalities.
-- Incidents involving a fatality make up a small proportion of total incidents by month.
+- Incidents involving a fatality make up a small percentage of total incidents by month as shown by the interactive mouseover feature in this figure.
 
 Black Lives Matter Protests
 ================================
