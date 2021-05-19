@@ -89,7 +89,7 @@ server <- shinyServer(function(input, output) {
       geom_text(aes(x=as.Date('2020-11-03'), label="Presidential \n Election", y = max(count)), colour="red", angle=0, size = 2)
   })
 })
-shinyApp(ui = ui, server = server, options = list(height = 400))
+shinyApp(ui = ui, server = server, options = list(height = 440))
 ```
 
 
@@ -150,7 +150,7 @@ shinyApp(
                  tooltip = 'y')})
     },
 
-    options = list(height = 775)
+    options = list(height = 685)
     )
 ```
 
@@ -322,7 +322,7 @@ server <- shinyServer(function(input, output) {
     ggplotly(by_group, tooltip = "text")
   })
 })
-shinyApp(ui, server, options = list(height = 400))
+shinyApp(ui, server, options = list(height = 442))
 ```
 
 #### Key Trends
@@ -361,7 +361,7 @@ deaths_by_month <- deaths_by_month + aes(text = paste0("</br> Number of Fataliti
                                                       paste(round(PctTot,2),"%")))
 ggplotly(deaths_by_month, tooltip = "text")
     })
-  }, options = list(height = 379)
+  }, options = list(height = 400)
 )
 ```
 
@@ -443,12 +443,12 @@ if (input$time == "Before George Floyd's Death") {
     })
   },
   
-  options = list(height = 430)
+  options = list(height = 400)
 )
 ```
 
 #### Key Trends
-- The Black Lives Matter Movement has grown tremendously in the United States over the course of 2020.
+- The Black Lives Matter Movement has grown tremendously in the United States over the course of 2020, as shown by the blue dots in the map above, representing protests whose actors were associated with the BLM movement.
 - Based on the time frames, changes in frequency of protests associated with BLM are easily visible.
 - After George Floyd's death, the number of BLM protests sees a dramatic spike and this continues into June.
 - As time wears on for the rest of the year, the amount of protests gradually drops, but the protest events are still much more frequent than in the first five months of 2020.
