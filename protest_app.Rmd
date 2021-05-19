@@ -301,8 +301,7 @@ ui <- shinyUI(
       )
     )
   ))
-  
-  
+
 server <- shinyServer(function(input, output) {
   output$incident_plot <- renderPlotly({
     if(input$pType == "Count"){
@@ -313,7 +312,8 @@ server <- shinyServer(function(input, output) {
       x_text = "Proportion of Incidents"
       title = "Fatality at Events by Proportion of Groups Involved"
     }
-    by_group <- ggplot(death_table %>% filter(n>input$min_n), aes(x=fatality, y=n, fill=groups))+
+    by_group <- ggplot(death_table %>% filter(n>20), 
+      aes(x = fatality, y=n, fill=groups))+
       geom_bar(position = plotType(input$pType), stat = "identity")+
       scale_fill_manual(values=colorset)+
       labs(x = "Fatality?", y = x_text, fill = "Groups Involved", 
